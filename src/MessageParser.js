@@ -1,6 +1,7 @@
 var Transform = require('stream').Transform
   , util = require('util')
   , Message = require('./Message')
+  , debug = require('debug')('ircs:MessageParser')
 
 module.exports = MessageParser
 
@@ -30,6 +31,8 @@ MessageParser.prototype._transform = function (buf, enc, cb) {
   if (offs < buf.length) {
     this.buffer = buf.slice(offs)
   }
+
+  cb()
 }
 
 MessageParser.prototype.parse = function (line) {
