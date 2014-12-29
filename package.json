@@ -1,0 +1,13 @@
+{ "name": "ircs"
+, "description": "IRC Server library in Node.js"
+, "version": "0.0.1"
+, "license": "MIT"
+, "keywords": [ "irc", "server" ]
+, "bugs": "https://github.com/goto-bus-stop/ircs/issues"
+, "author": "goto-bus-stop <rene@kooi.me>"
+, "main": "src/Server"
+, "repository":
+  { "type": "git"
+  , "url" : "http://github.com/goto-bus-stop/ircs.git"
+  }
+}
