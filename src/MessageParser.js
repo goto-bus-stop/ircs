@@ -14,6 +14,7 @@ function MessageParser() {
 util.inherits(MessageParser, Transform)
 
 MessageParser.prototype._transform = function (buf, enc, cb) {
+  debug('incoming', buf)
   buf = buf.toString('utf8')
   if (this.buffer) {
     buf = this.buffer + buf
@@ -28,14 +29,16 @@ MessageParser.prototype._transform = function (buf, enc, cb) {
     last = offs
   }
 
-  if (offs < buf.length) {
-    this.buffer = buf.slice(offs)
+  if (last < buf.length) {
+    debug('buffering', buf.slice(last))
+    this.buffer = buf.slice(last)
   }
 
   cb()
 }
 
 MessageParser.prototype.parse = function (line) {
+  debug('parsing', line)
   var message = Message()
   if (line[0] === ':') {
     var prefixEnd = line.indexOf(' ')
