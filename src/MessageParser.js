@@ -5,6 +5,9 @@ var Transform = require('stream').Transform
 
 module.exports = MessageParser
 
+/**
+ * Turns a stream of plain text IRC commands into a stream of IRC Message objects.
+ */
 function MessageParser() {
   if (!(this instanceof MessageParser)) return new MessageParser()
   Transform.call(this)
@@ -13,6 +16,14 @@ function MessageParser() {
 }
 util.inherits(MessageParser, Transform)
 
+/**
+ * Parses stuff.
+ *
+ * @param {Buffer} buf Buffer containing the latest command text.
+ * @param {string} enc "buffer". (It better be.)
+ * @param {function()} cb Callback, for when we're done parsing.
+ * @private
+ */
 MessageParser.prototype._transform = function (buf, enc, cb) {
   debug('incoming', buf)
   buf = buf.toString('utf8')
@@ -37,6 +48,11 @@ MessageParser.prototype._transform = function (buf, enc, cb) {
   cb()
 }
 
+/**
+ * Parses individual IRC commands. Result gets pushed into the stream.
+ *
+ * @param {string} line IRC command string.
+ */
 MessageParser.prototype.parse = function (line) {
   debug('parsing', line)
   var message = Message()

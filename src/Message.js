@@ -1,5 +1,12 @@
 module.exports = Message
 
+/**
+ * Represents an IRC message.
+ *
+ * @param {string|null} prefix Message prefix. (Optional.)
+ * @param {string} command Command name.
+ * @param {Array.<string>} parameters IRC Command parameters.
+ */
 function Message(prefix, command, parameters) {
   if (!(this instanceof Message)) return new Message(prefix, command, parameters)
   this.prefix = prefix
@@ -14,6 +21,11 @@ function Message(prefix, command, parameters) {
   }
 }
 
+/**
+ * Compiles the message back down into an IRC command string.
+ *
+ * @return {string} IRC command.
+ */
 Message.prototype.toString = function () {
   return (this.prefix ? ':' + this.prefix + ' ' : '') +
          this.command +
