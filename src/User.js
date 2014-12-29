@@ -18,6 +18,13 @@ function User(sock) {
 }
 util.inherits(User, EventEmitter)
 
+User.prototype.join = function (channel) {
+  channel.users.push(this)
+
+  this.send(this.mask(), 'JOIN', [ channel.name ])
+  channel.send(this.mask(), 'JOIN', [ channel.name ])
+}
+
 User.prototype.onReceive = function (message) {
   debug('receive', message + '')
   this.emit('message', message)
@@ -29,6 +36,11 @@ User.prototype.send = function (message) {
   }
   debug('send', message + '')
   this.sock.write(message + '\r\n')
+}
+
+User.prototype.matchesMask = function (mask) {
+  // simple & temporary
+  return mask === this.mask()
 }
 
 User.prototype.mask = function () {

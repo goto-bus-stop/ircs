@@ -1,6 +1,7 @@
 var net = require('net')
   , util = require('util')
   , User = require('./User')
+  , Channel = require('./Channel')
   , Message = require('./Message')
   , DefaultCommands = require('./Commands')
   , debug = require('debug')('ircs:Server')
@@ -19,7 +20,7 @@ function Server(options, connectionListener) {
 
   this.commands = DefaultCommands(this)
   this.users = []
-  this.channels = []
+  this.channels = {}
 
   this.hostname = 'localhost'
 
@@ -36,6 +37,23 @@ function Server(options, connectionListener) {
 
 util.inherits(Server, net.Server)
 
+Server.prototype.findUser = function (nickname) {
+  nickname = normalize(nickname)
+  for (var i = 0, l = this.users.length; i < l; i++) {
+    if (normalize(this.users[i].nickname) === nickname) {
+      return this.users[i]
+    }
+  }
+}
+
+Server.prototype.findChannel = function (channelName) {
+  channelName = normalize(channelName)
+  if (!(channelName in this.channels)) {
+    this.channels[channelName] = Channel(channelName)
+  }
+  return this.channels[channelName]
+}
+
 Server.prototype.execute = function (user, message) {
   var command = message.command.toUpperCase()
     , handle = this.commands[command]
@@ -44,7 +62,7 @@ Server.prototype.execute = function (user, message) {
     handle.apply(this.commands, [ user ].concat(message.parameters))
   }
   else {
-    user.send(this.mask(), 'NOTICE', [ user.nickname, 'No such command.' ])
+    user.send(this.mask(), '421', [ user.nickname, command, 'Unknown command.' ])
   }
 }
 
@@ -57,4 +75,12 @@ Server.prototype.send = function (message) {
 
 Server.prototype.mask = function () {
   return 'localhost'
+}
+
+function normalize(str) {
+  return str.toLowerCase().trim()
+    // {, } and | are uppercase variants of [, ] and \ respectively
+    .replace(/{/g, '[')
+    .replace(/}/g, ']')
+    .replace(/\|/g, '\\')
 }
