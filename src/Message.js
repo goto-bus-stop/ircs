@@ -15,7 +15,7 @@ function Message(prefix, command, parameters) {
 
   if (parameters) {
     var last = parameters[parameters.length - 1]
-    if (last.indexOf(' ') !== -1) {
+    if (last && last.indexOf(' ') !== -1) {
       parameters[parameters.length - 1] = ':' + parameters[parameters.length - 1]
     }
   }

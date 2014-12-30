@@ -55,16 +55,19 @@ MessageParser.prototype._transform = function (buf, enc, cb) {
  */
 MessageParser.prototype.parse = function (line) {
   debug('parsing', line)
-  var message = Message()
+
+  var prefix
+    , command
+    , params
+
   if (line[0] === ':') {
     var prefixEnd = line.indexOf(' ')
-    message.prefix = line.slice(1, prefixEnd)
+    prefix = line.slice(1, prefixEnd)
     line = line.slice(prefixEnd + 1)
   }
 
   var colon = line.indexOf(' :')
     , append
-    , params
   if (colon !== -1) {
     append = line.slice(colon + 2)
     line = line.slice(0, colon)
@@ -74,7 +77,6 @@ MessageParser.prototype.parse = function (line) {
     params = line.split(/ +/g)
   }
 
-  message.command = params.shift()
-  message.parameters = params
-  this.push(message)
+  command = params.shift()
+  this.push(Message(prefix, command, params))
 }
