@@ -18,22 +18,11 @@ function User(sock) {
 
   this.sock = sock
   this.nickname = null
+  this.hostname = sock.remoteAddress
 
   sock.pipe(MessageParser()).on('data', this.onReceive.bind(this))
 }
 util.inherits(User, EventEmitter)
-
-/**
- * Join a channel.
- *
- * @param {Channel} channel Channel object to join.
- */
-User.prototype.join = function (channel) {
-  channel.users.push(this)
-
-  this.send(this.mask(), 'JOIN', [ channel.name ])
-  channel.send(this.mask(), 'JOIN', [ channel.name ])
-}
 
 /**
  * Process a message sent by this user.
@@ -79,8 +68,15 @@ User.prototype.matchesMask = function (mask) {
  * @todo Just use a temporary nick or something, so we don't have to deal with `false` everywhere…
  */
 User.prototype.mask = function () {
+  var mask = ''
   if (this.nickname) {
-    return this.nickname
+    mask += this.nickname
+    if (this.username) {
+      mask += '!' + this.username
+    }
+    if (this.hostname) {
+      mask += '@' + this.hostname
+    }
   }
-  return false
+  return mask || false
 }

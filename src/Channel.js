@@ -15,6 +15,38 @@ function Channel(name) {
 }
 
 /**
+ * Joins a user into this channel.
+ *
+ * @param {User} user Joining user.
+ */
+Channel.prototype.join = function (user) {
+  this.users.push(user)
+}
+
+/**
+ * Parts a user from this channel.
+ *
+ * @param {User} user Parting user.
+ */
+Channel.prototype.part = function (user) {
+  var i = this.users.indexOf(user)
+  if (i !== -1) {
+    this.users.splice(i, 1)
+  }
+}
+
+/**
+ * Checks if a user is in this channel.
+ *
+ * @param {User} user User to look for.
+ *
+ * @return boolean Whether the user is here.
+ */
+Channel.prototype.hasUser = function (user) {
+  return this.users.indexOf(user) !== -1
+}
+
+/**
  * Sends a message to all users in a channel, including the sender.
  *
  * @param {Message} message Message to send.
@@ -38,4 +70,13 @@ Channel.prototype.broadcast = function (message) {
   this.users.forEach(function (u) {
     if (!u.matchesMask(message.prefix)) u.send(message)
   })
+}
+
+/**
+ * Returns the nicknames of all users in this channel.
+ *
+ * @return {Array.<string>} Names.
+ */
+Channel.prototype.names = function () {
+  return this.users.map(function (user) { return user.nickname })
 }
