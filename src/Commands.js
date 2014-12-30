@@ -3,17 +3,42 @@ var debug = require('debug')('ircs:commands')
 
 module.exports = Commands
 
+/**
+ * Default bare IRC server commands.
+ *
+ * @param {Server} server Which IRC Server instance these commands run on.
+ */
 function Commands(server) {
   if (!(this instanceof Commands)) return new Commands(server)
 
   this.server = server
 }
 
+/**
+ * IRC /NICK command.
+ *
+ * Changes a user's nickname.
+ *
+ * @param {User} user User that sent the message.
+ * @param {string} nickname New nick for the user.
+ */
 Commands.prototype.NICK = function (user, nickname) {
   debug('NICK', user.mask(), nickname)
   user.nickname = nickname
 }
 
+/**
+ * IRC /USER command.
+ *
+ * Specifies username, hostname, servername and real name for a user.
+ * Currently also sends a welcome message back to the user (should change)
+ *
+ * @param {User} user User that sent the message.
+ * @param {string} username Username to use.
+ * @param {string} hostname User's hostname. Gets ignored, we just grab it from the user IP instead.
+ * @param {string} servername Servername which the user connected to. Gets ignored, since we already know.
+ * @param {string} realname User's real name.
+ */
 Commands.prototype.USER = function (user, username, hostname, servername, realname) {
   debug('USER', user.mask(), username, hostname, servername, realname)
 
@@ -30,6 +55,12 @@ Commands.prototype.USER = function (user, username, hostname, servername, realna
   user.send(serverMask, 'MODE', [ user.nickname, '+w' ])
 }
 
+/**
+ * Joins a channel.
+ *
+ * @param {User} user User who wants to join a channel.
+ * @param {string} channelName Name of the channel to join.
+ */
 Commands.prototype.JOIN = function (user, channelName) {
   var channel = this.server.findChannel(channelName)
   channel.join(user)
@@ -41,6 +72,13 @@ Commands.prototype.JOIN = function (user, channelName) {
   user.send(user.mask(), '366', [ user.nickname, channel.name, 'End of /NAMES list.' ])
 }
 
+/**
+ * Parts a channel.
+ *
+ * @param {User} user User who wants to leave a channel.
+ * @param {string} channelName Channel to leave.
+ * @param {string} message Good-bye message.
+ */
 Commands.prototype.PART = function (user, channelName, message) {
   var channel = this.server.findChannel(channelName)
 
@@ -61,6 +99,12 @@ Commands.prototype.PART = function (user, channelName, message) {
   user.send(user.mask(), 'PART', [ channel.name ])
 }
 
+/**
+ * Replies with the names of all users in a channel.
+ *
+ * @param {User} user Message sender.
+ * @param {string} channelName Name of the channel to look at.
+ */
 Commands.prototype.NAMES = function (user, channelName) {
   var channel = this.server.findChannel(channelName)
   if (channel) {
@@ -71,6 +115,12 @@ Commands.prototype.NAMES = function (user, channelName) {
   }
 }
 
+/**
+ * Replies with more info about users in a channel.
+ *
+ * @param {User} user Message sender.
+ * @param {string} channelName Name of the channel to look at.
+ */
 Commands.prototype.WHO = function (user, channelName) {
   var channel = this.server.findChannel(channelName)
   if (channel) {
@@ -84,6 +134,13 @@ Commands.prototype.WHO = function (user, channelName) {
   }
 }
 
+/**
+ * Sends a message to a user or channel.
+ *
+ * @param {User} user Message sender.
+ * @param {string} targetName Recipient nickname or channel name.
+ * @param {string} content Message content.
+ */
 Commands.prototype.PRIVMSG = function (user, targetName, content) {
   if (targetName[0] === '#' || targetName[0] === '&') {
     target = this.server.findChannel(targetName)
@@ -99,6 +156,7 @@ Commands.prototype.PRIVMSG = function (user, targetName, content) {
   }
 
   if (!target) {
-    user.send(this.server.mask(), '401'/* ERR_NOSUCHNICK */, [ user.nickname, targetName, 'No such nick/channel' ])
+    var ERR_NOSUCHNICK = '401'
+    user.send(this.server.mask(), ERR_NOSUCHNICK, [ user.nickname, targetName, 'No such nick/channel' ])
   }
 }
