@@ -42,14 +42,13 @@ Commands.prototype.NICK = function (user, nickname) {
 Commands.prototype.USER = function (user, username, hostname, servername, realname) {
   debug('USER', user.mask(), username, hostname, servername, realname)
 
-  var mask = user.mask()
-    , serverMask = this.server.mask()
   user.username = username
-  user.servername = servername
+  user.servername = this.server.hostname
   user.realname = realname
 
+  var serverMask = this.server.mask()
   user.send(serverMask, '001', [ user.nickname, 'Welcome' ])
-  user.send(serverMask, '002', [ user.nickname, 'Your host is ' + serverMask + ' running version ' + package.version ])
+  user.send(serverMask, '002', [ user.nickname, 'Your host is ' + this.server.hostname + ' running version ' + package.version ])
   user.send(serverMask, '003', [ user.nickname, 'This server was created ' + this.server.created ])
   user.send(serverMask, '004', [ user.nickname, package.name, package.version ])
   user.send(serverMask, 'MODE', [ user.nickname, '+w' ])
