@@ -4,6 +4,7 @@ var net = require('net')
   , Channel = require('./Channel')
   , Message = require('./Message')
   , DefaultCommands = require('./Commands')
+  , r = require('./replies')
   , debug = require('debug')('ircs:Server')
 
 module.exports = Server
@@ -92,7 +93,7 @@ Server.prototype.execute = function (user, message) {
     handle.apply(this.commands, [ user ].concat(message.parameters))
   }
   else {
-    user.send(this.mask(), '421', [ user.nickname, command, 'Unknown command.' ])
+    user.send(this.mask(), r.ERR_UNKNOWNCOMMAND, [ user.nickname, command, 'Unknown command.' ])
   }
 }
 

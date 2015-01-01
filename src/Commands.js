@@ -1,4 +1,5 @@
 var debug = require('debug')('ircs:commands')
+  , r = require('./replies')
   , package = require('../package.json')
 
 module.exports = Commands
@@ -82,13 +83,11 @@ Commands.prototype.PART = function (user, channelName, message) {
   var channel = this.server.findChannel(channelName)
 
   if (!channel) {
-    var ERR_NOSUCHCHANNEL = '403'
-    user.send(user.mask(), ERR_NOSUCHCHANNEL, [ channelName, 'No such channel.' ])
+    user.send(user.mask(), r.ERR_NOSUCHCHANNEL, [ channelName, 'No such channel.' ])
     return
   }
   if (!channel.hasUser(user)) {
-    var ERR_NOTONCHANNEL = '442'
-    user.send(user.mask(), ERR_NOTONCHANNEL, [ channelName, 'You\'re not on that channel.' ])
+    user.send(user.mask(), r.ERR_NOTONCHANNEL, [ channelName, 'You\'re not on that channel.' ])
     return
   }
 
@@ -107,10 +106,8 @@ Commands.prototype.PART = function (user, channelName, message) {
 Commands.prototype.NAMES = function (user, channelName) {
   var channel = this.server.findChannel(channelName)
   if (channel) {
-    var RPL_NAMREPLY = '353'
-      , RPL_ENDOFNAMES = '366'
-    user.send(user.mask(), RPL_NAMREPLY, [ user.nickname, '=', channel.name ].concat(channel.names()))
-    user.send(user.mask(), RPL_ENDOFNAMES, [ user.nickname, channel.name, 'End of /NAMES list.' ])
+    user.send(user.mask(), r.RPL_NAMREPLY, [ user.nickname, '=', channel.name ].concat(channel.names()))
+    user.send(user.mask(), r.RPL_ENDOFNAMES, [ user.nickname, channel.name, 'End of /NAMES list.' ])
   }
 }
 
@@ -123,13 +120,11 @@ Commands.prototype.NAMES = function (user, channelName) {
 Commands.prototype.WHO = function (user, channelName) {
   var channel = this.server.findChannel(channelName)
   if (channel) {
-    var RPL_WHOREPLY = '352'
-      , RPL_ENDOFWHO = '315'
     channel.users.forEach(function (u) {
-      user.send(user.mask(), RPL_WHOREPLY, [ user.nickname, channel.name, u.username, u.hostname,
+      user.send(user.mask(), r.RPL_WHOREPLY, [ user.nickname, channel.name, u.username, u.hostname,
                                              u.servername, u.nickname, 'H', ':0', u.realname ])
     })
-    user.send(user.mask(), RPL_ENDOFWHO, [ user.nickname, channelName, 'End of /WHO list.' ])
+    user.send(user.mask(), r.RPL_ENDOFWHO, [ user.nickname, channelName, 'End of /WHO list.' ])
   }
 }
 
@@ -156,6 +151,6 @@ Commands.prototype.PRIVMSG = function (user, targetName, content) {
 
   if (!target) {
     var ERR_NOSUCHNICK = '401'
-    user.send(this.server.mask(), ERR_NOSUCHNICK, [ user.nickname, targetName, 'No such nick/channel' ])
+    user.send(this.server.mask(), r.ERR_NOSUCHNICK, [ user.nickname, targetName, 'No such nick/channel' ])
   }
 }
