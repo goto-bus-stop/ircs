@@ -63,13 +63,22 @@ Commands.prototype.USER = function (user, username, hostname, servername, realna
  */
 Commands.prototype.JOIN = function (user, channelName) {
   var channel = this.server.getChannel(channelName)
+    , mask = this.server.mask()
   channel.join(user)
 
   channel.send(user.mask(), 'JOIN', [ channel.name, user.username, user.realname ])
 
   // Names
-  user.send(user.mask(), '353', [ user.nickname, '=', channel.name ].concat(channel.names()))
-  user.send(user.mask(), '366', [ user.nickname, channel.name, 'End of /NAMES list.' ])
+  user.send(mask, r.RPL_NAMREPLY, [ user.nickname, '=', channel.name ].concat(channel.names()))
+  user.send(mask, r.RPL_ENDOFNAMES, [ user.nickname, channel.name, 'End of /NAMES list.' ])
+
+  // Topic
+  if (channel.topic) {
+    user.send(mask, r.RPL_TOPIC, [ user.nickname, channel.name, channel.topic ])
+  }
+  else {
+    user.send(mask, r.RPL_NOTOPIC, [ user.nickname, channel.name, 'No topic is set.' ])
+  }
 }
 
 /**
@@ -98,6 +107,44 @@ Commands.prototype.PART = function (user, channelName, message) {
 }
 
 /**
+ * IRC /TOPIC command.
+ *
+ * Sets channel topics.
+ *
+ * @param {User} user Message sender.
+ * @param {string} channelName Channel name.
+ * @param {string} topic New topic.
+ */
+Commands.prototype.TOPIC = function (user, channelName, topic) {
+  var channel = this.server.findChannel(channelName)
+  if (channel) {
+    var mask = this.server.mask()
+    // no new topic given, → check
+    if (topic === undefined) {
+      if (channel.topic) {
+        user.send(mask, r.RPL_TOPIC, [ user.nickname, channel.name, channel.topic ])
+      }
+      else {
+        user.send(mask, r.RPL_NOTOPIC, [ user.nickname, channel.name, 'No topic is set.' ])
+      }
+      return
+    }
+
+    if (!channel.hasUser(user)) {
+      user.send(mask, r.ERR_NOTONCHANNEL, [ user.nickname, channel.name, 'You\'re not on that channel.' ])
+      return
+    }
+    if (false/** @todo (user is not op) */) {
+      user.send(mask, r.ERR_CHANOPRIVSNEEDED, [ user.nickname, channel.name, 'You\'re not channel operator' ])
+      return
+    }
+    // empty string for topic, → clear
+    channel.topic = topic === '' ? null : topic
+    channel.send(user.mask(), 'TOPIC', [ channel.name, topic === '' ? ':' : topic  ])
+  }
+}
+
+/**
  * Replies with the names of all users in a channel.
  *
  * @param {User} user Message sender.
@@ -106,8 +153,8 @@ Commands.prototype.PART = function (user, channelName, message) {
 Commands.prototype.NAMES = function (user, channelName) {
   var channel = this.server.findChannel(channelName)
   if (channel) {
-    user.send(user.mask(), r.RPL_NAMREPLY, [ user.nickname, '=', channel.name ].concat(channel.names()))
-    user.send(user.mask(), r.RPL_ENDOFNAMES, [ user.nickname, channel.name, 'End of /NAMES list.' ])
+    user.send(this.server.mask(), r.RPL_NAMREPLY, [ user.nickname, '=', channel.name ].concat(channel.names()))
+    user.send(this.server.mask(), r.RPL_ENDOFNAMES, [ user.nickname, channel.name, 'End of /NAMES list.' ])
   }
 }
 
@@ -120,11 +167,12 @@ Commands.prototype.NAMES = function (user, channelName) {
 Commands.prototype.WHO = function (user, channelName) {
   var channel = this.server.findChannel(channelName)
   if (channel) {
+    var mask = this.server.mask()
     channel.users.forEach(function (u) {
-      user.send(user.mask(), r.RPL_WHOREPLY, [ user.nickname, channel.name, u.username, u.hostname,
-                                             u.servername, u.nickname, 'H', ':0', u.realname ])
+      user.send(mask, r.RPL_WHOREPLY, [ user.nickname, channel.name, u.username, u.hostname,
+                                        u.servername, u.nickname, 'H', ':0', u.realname ])
     })
-    user.send(user.mask(), r.RPL_ENDOFWHO, [ user.nickname, channelName, 'End of /WHO list.' ])
+    user.send(mask, r.RPL_ENDOFWHO, [ user.nickname, channelName, 'End of /WHO list.' ])
   }
 }
 
@@ -136,6 +184,7 @@ Commands.prototype.WHO = function (user, channelName) {
  * @param {string} content Message content.
  */
 Commands.prototype.PRIVMSG = function (user, targetName, content) {
+  var target
   if (targetName[0] === '#' || targetName[0] === '&') {
     target = this.server.findChannel(targetName)
     if (target) {

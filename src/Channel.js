@@ -12,6 +12,7 @@ function Channel(name) {
 
   this.name = name
   this.users = []
+  this.topic = null
 }
 
 /**
