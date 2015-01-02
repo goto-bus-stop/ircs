@@ -21,6 +21,8 @@ Server.createServer = function (options, connectionListener) {
 function Server(options, connectionListener) {
   if (!(this instanceof Server)) return new Server(options, connectionListener)
 
+  options = options || {}
+
   net.Server.call(this, options, connectionListener)
 
   this.created = new Date()
@@ -29,7 +31,7 @@ function Server(options, connectionListener) {
   this.users = []
   this.channels = {}
 
-  this.hostname = 'localhost'
+  this.hostname = options.hostname || 'localhost'
 
   this.on('connection', function (sock) {
     var user = User(sock)
@@ -61,20 +63,58 @@ Server.prototype.findUser = function (nickname) {
 }
 
 /**
- * Gets a channel by its name, creating a new one if it does not yet exist.
+ * Finds a channel on the server.
  *
  * @param {string} channelName Channel name.
  *
- * @return {Channel} Relevant Channel object.
- * @todo Move this madness around, into a findChannel and createChannel or getChannel.
- *    (Where findChannel would only find one, createChannel would only create, & getChannel would do both?)
+ * @return {Channel|undefined} Relevant Channel object if found, `undefined` if not found.
  */
 Server.prototype.findChannel = function (channelName) {
+  channelName = normalize(channelName)
+  return this.channels[channelName]
+}
+
+/**
+ * Creates a new channel with the given name.
+ *
+ * @param {string} channelName Channel name.
+ *
+ * @return {Channel} The new Channel.
+ */
+Server.prototype.createChannel = function (channelName) {
   channelName = normalize(channelName)
   if (!(channelName in this.channels)) {
     this.channels[channelName] = Channel(channelName)
   }
   return this.channels[channelName]
+}
+
+/**
+ * Gets a channel by name, creating a new one if it does not yet exist.
+ *
+ * @param {string} channelName Channel name.
+ *
+ * @return {Channel} The Channel.
+ */
+Server.prototype.getChannel = function (channelName) {
+  channelName = normalize(channelName)
+  var channel = this.findChannel(channelName)
+  if (!channel) {
+    channel = this.createChannel(channelName)
+  }
+  return channel
+}
+
+/**
+ * Checks if there is a channel of a given name.
+ *
+ * @param {string} channelName Channel name.
+ *
+ * @return {boolean} True if the channel exists, false if not.
+ */
+Server.prototype.hasChannel = function (channelName) {
+  channelName = normalize(channelName)
+  return channelName in this.channels
 }
 
 /**
@@ -117,7 +157,7 @@ Server.prototype.send = function (message) {
  * @return {string} Mask.
  */
 Server.prototype.mask = function () {
-  return 'localhost'
+  return this.hostname
 }
 
 function normalize(str) {

@@ -62,7 +62,7 @@ Commands.prototype.USER = function (user, username, hostname, servername, realna
  * @param {string} channelName Name of the channel to join.
  */
 Commands.prototype.JOIN = function (user, channelName) {
-  var channel = this.server.findChannel(channelName)
+  var channel = this.server.getChannel(channelName)
   channel.join(user)
 
   channel.send(user.mask(), 'JOIN', [ channel.name, user.username, user.realname ])
@@ -156,6 +156,9 @@ Commands.prototype.PRIVMSG = function (user, targetName, content) {
 
 /**
  * IRC /WHOIS command.
+ *
+ * @param {User} user Message sender.
+ * @param {string} nickmask Nick mask of the user to find.
  */
 Commands.prototype.WHOIS = function (user, nickmask) {
   var target = this.server.findUser(nickmask)
