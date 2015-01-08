@@ -1,6 +1,5 @@
-var Transform = require('stream').Transform
-  , util = require('util')
-  , Message = require('./Message')
+var Message = require('./Message')
+  , split = require('split')
   , debug = require('debug')('ircs:MessageParser')
 
 module.exports = MessageParser
@@ -9,49 +8,14 @@ module.exports = MessageParser
  * Turns a stream of plain text IRC commands into a stream of IRC Message objects.
  */
 function MessageParser() {
-  if (!(this instanceof MessageParser)) return new MessageParser()
-  Transform.call(this)
-  this._readableState.objectMode = true
-  this.buffer = null
-}
-util.inherits(MessageParser, Transform)
-
-/**
- * Parses stuff.
- *
- * @param {Buffer} buf Buffer containing the latest command text.
- * @param {string} enc "buffer". (It better be.)
- * @param {function()} cb Callback, for when we're done parsing.
- * @private
- */
-MessageParser.prototype._transform = function (buf, enc, cb) {
-  debug('incoming', buf)
-  buf = buf.toString('utf8')
-  if (this.buffer) {
-    buf = this.buffer + buf
-    this.buffer = null
-  }
-
-  var last = 0
-    , offs = 0
-  while ((offs = buf.indexOf('\r\n', offs)) !== -1) {
-    this.parse(buf.slice(last, offs))
-    offs += 2
-    last = offs
-  }
-
-  if (last < buf.length) {
-    debug('buffering', buf.slice(last))
-    this.buffer = buf.slice(last)
-  }
-
-  cb()
+  return split('\r\n', MessageParser.prototype.parse)
 }
 
 /**
- * Parses individual IRC commands. Result gets pushed into the stream.
+ * Parses an individual IRC command.
  *
  * @param {string} line IRC command string.
+ * @return {Message}
  */
 MessageParser.prototype.parse = function (line) {
   debug('parsing', line)
@@ -78,5 +42,5 @@ MessageParser.prototype.parse = function (line) {
   }
 
   command = params.shift()
-  this.push(Message(prefix, command, params))
+  return Message(prefix, command, params)
 }

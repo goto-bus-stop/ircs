@@ -6,6 +6,8 @@
 , "bugs": "https://github.com/goto-bus-stop/ircs/issues"
 , "author": "goto-bus-stop <rene@kooi.me>"
 , "main": "src/Server"
+, "dependencies":
+  { "split": "^0.3.2" }
 , "repository":
   { "type": "git"
   , "url" : "http://github.com/goto-bus-stop/ircs.git"
