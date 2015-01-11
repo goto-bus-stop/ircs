@@ -7,7 +7,9 @@
 , "author": "goto-bus-stop <rene@kooi.me>"
 , "main": "src/Server"
 , "dependencies":
-  { "split": "^0.3.2" }
+  { "split": "^0.3.2"
+  , "array-find": "^0.1.1"
+  , "es6-map": "^0.1.1" }
 , "repository":
   { "type": "git"
   , "url" : "http://github.com/goto-bus-stop/ircs.git"

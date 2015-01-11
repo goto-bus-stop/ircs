@@ -1,3 +1,5 @@
+'use strict'
+
 module.exports = {
   ERR_NOSUCHNICK: 401
 , ERR_NOSUCHSERVER: 402

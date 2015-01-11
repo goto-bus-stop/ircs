@@ -1,4 +1,7 @@
+'use strict'
+
 var Message = require('./Message')
+var Map = require('es6-map')
 
 module.exports = Channel
 
@@ -13,6 +16,8 @@ function Channel(name) {
   this.name = name
   this.users = []
   this.topic = null
+
+  this.modes = Map()
 }
 
 /**
@@ -71,6 +76,15 @@ Channel.prototype.broadcast = function (message) {
   this.users.forEach(function (u) {
     if (!u.matchesMask(message.prefix)) u.send(message)
   })
+}
+
+Channel.prototype.setMode = function (user, mode) {
+  if (mode == null) this.modes.delete(user)
+  else this.modes.set(user, mode)
+}
+
+Channel.prototype.getMode = function (user) {
+  return this.modes.get(user)
 }
 
 /**

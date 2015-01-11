@@ -1,3 +1,5 @@
+'use strict'
+
 var debug = require('debug')('ircs:User')
   , EventEmitter = require('events').EventEmitter
   , util = require('util')

@@ -1,5 +1,8 @@
+'use strict'
+
 var net = require('net')
   , util = require('util')
+  , find = require('array-find')
   , User = require('./User')
   , Channel = require('./Channel')
   , Message = require('./Message')
@@ -55,11 +58,7 @@ util.inherits(Server, net.Server)
  */
 Server.prototype.findUser = function (nickname) {
   nickname = normalize(nickname)
-  for (var i = 0, l = this.users.length; i < l; i++) {
-    if (normalize(this.users[i].nickname) === nickname) {
-      return this.users[i]
-    }
-  }
+  return find(this.users, function (user) { return normalize(user.nickname) === nickname })
 }
 
 /**
@@ -70,8 +69,7 @@ Server.prototype.findUser = function (nickname) {
  * @return {Channel|undefined} Relevant Channel object if found, `undefined` if not found.
  */
 Server.prototype.findChannel = function (channelName) {
-  channelName = normalize(channelName)
-  return this.channels[channelName]
+  return this.channels[normalize(channelName)]
 }
 
 /**
@@ -83,10 +81,8 @@ Server.prototype.findChannel = function (channelName) {
  */
 Server.prototype.createChannel = function (channelName) {
   channelName = normalize(channelName)
-  if (!(channelName in this.channels)) {
-    this.channels[channelName] = Channel(channelName)
-  }
-  return this.channels[channelName]
+  return channelName in this.channels ? this.channels[channelName]
+                                      : (this.channels[channelName] = Channel(channelName))
 }
 
 /**
@@ -97,12 +93,7 @@ Server.prototype.createChannel = function (channelName) {
  * @return {Channel} The Channel.
  */
 Server.prototype.getChannel = function (channelName) {
-  channelName = normalize(channelName)
-  var channel = this.findChannel(channelName)
-  if (!channel) {
-    channel = this.createChannel(channelName)
-  }
-  return channel
+  return this.findChannel(channelName) || this.createChannel(channelName)
 }
 
 /**
@@ -113,8 +104,7 @@ Server.prototype.getChannel = function (channelName) {
  * @return {boolean} True if the channel exists, false if not.
  */
 Server.prototype.hasChannel = function (channelName) {
-  channelName = normalize(channelName)
-  return channelName in this.channels
+  return normalize(channelName) in this.channels
 }
 
 /**

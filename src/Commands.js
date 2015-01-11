@@ -1,6 +1,8 @@
+'use strict'
+
 var debug = require('debug')('ircs:commands')
   , r = require('./replies')
-  , package = require('../package.json')
+  , pkg = require('../package.json')
 
 module.exports = Commands
 
@@ -49,9 +51,9 @@ Commands.prototype.USER = function (user, username, hostname, servername, realna
 
   var serverMask = this.server.mask()
   user.send(serverMask, '001', [ user.nickname, 'Welcome' ])
-  user.send(serverMask, '002', [ user.nickname, 'Your host is ' + this.server.hostname + ' running version ' + package.version ])
+  user.send(serverMask, '002', [ user.nickname, 'Your host is ' + this.server.hostname + ' running version ' + pkg.version ])
   user.send(serverMask, '003', [ user.nickname, 'This server was created ' + this.server.created ])
-  user.send(serverMask, '004', [ user.nickname, package.name, package.version ])
+  user.send(serverMask, '004', [ user.nickname, pkg.name, pkg.version ])
   user.send(serverMask, 'MODE', [ user.nickname, '+w' ])
 }
 
