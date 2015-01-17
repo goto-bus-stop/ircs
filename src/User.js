@@ -1,12 +1,11 @@
 'use strict'
 
-var debug = require('debug')('ircs:User')
-  , EventEmitter = require('events').EventEmitter
-  , util = require('util')
-  , MessageParser = require('./MessageParser')
-  , Message = require('./Message')
+import { EventEmitter } from 'events'
+import { inherits } from 'util'
+import MessageParser from './MessageParser'
+import Message from './Message'
 
-module.exports = User
+let debug = require('debug')('ircs:User')
 
 /**
  * Represents a User on the server.
@@ -15,7 +14,7 @@ module.exports = User
  *
  * @constructor
  */
-function User(sock) {
+export default function User(sock) {
   if (!(this instanceof User)) return new User(sock)
 
   EventEmitter.call(this)
@@ -26,7 +25,7 @@ function User(sock) {
 
   sock.pipe(MessageParser()).on('data', this.onReceive.bind(this))
 }
-util.inherits(User, EventEmitter)
+inherits(User, EventEmitter)
 
 /**
  * Process a message sent by this user.

@@ -1,9 +1,5 @@
-'use strict'
-
-var Message = require('./Message')
-var Map = require('es6-map')
-
-module.exports = Channel
+import Message from './Message'
+import Map from 'es6-map'
 
 /**
  * Represents an IRC Channel on the server.
@@ -12,14 +8,14 @@ module.exports = Channel
  *
  * @constructor
  */
-function Channel(name) {
+export default function Channel(name) {
   if (!(this instanceof Channel)) return new Channel(name)
 
   this.name = name
   this.users = []
   this.topic = null
 
-  this.modes = Map()
+  this.modes = new Map()
 }
 
 /**
@@ -63,7 +59,7 @@ Channel.prototype.send = function (message) {
   if (!(message instanceof Message)) {
     message = Message.apply(null, arguments)
   }
-  this.users.forEach(function (u) { u.send(message) })
+  this.users.forEach(u => { u.send(message) })
 }
 
 /**
@@ -75,7 +71,7 @@ Channel.prototype.broadcast = function (message) {
   if (!(message instanceof Message)) {
     message = Message.apply(null, arguments)
   }
-  this.users.forEach(function (u) {
+  this.users.forEach(u => {
     if (!u.matchesMask(message.prefix)) u.send(message)
   })
 }
@@ -95,5 +91,5 @@ Channel.prototype.getMode = function (user) {
  * @return {Array.<string>} Names.
  */
 Channel.prototype.names = function () {
-  return this.users.map(function (user) { return user.nickname })
+  return this.users.map(user => user.nickname)
 }

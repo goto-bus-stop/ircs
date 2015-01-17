@@ -1,6 +1,4 @@
-'use strict'
-
-module.exports = {
+export default {
   ERR_NOSUCHNICK: 401
 , ERR_NOSUCHSERVER: 402
 , ERR_NOSUCHCHANNEL: 403

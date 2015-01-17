@@ -8,7 +8,7 @@ IRC Server library in Node.js
 ```javascript
 var ircs = require('ircs')
 
-ircs().listen(6667, function () {
+ircs().listen(6667, () => {
   console.log('Ready, sire!')
 })
 ```

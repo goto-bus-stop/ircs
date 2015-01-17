@@ -1,13 +1,12 @@
-var Message = require('./Message')
-  , split = require('split')
-  , debug = require('debug')('ircs:MessageParser')
+import Message from './Message'
+import split from 'split'
 
-module.exports = MessageParser
+let debug = require('debug')('ircs:MessageParser')
 
 /**
  * Turns a stream of plain text IRC commands into a stream of IRC Message objects.
  */
-function MessageParser() {
+export default function MessageParser() {
   return split('\r\n', MessageParser.prototype.parse)
 }
 
@@ -20,20 +19,19 @@ function MessageParser() {
 MessageParser.prototype.parse = function (line) {
   debug('parsing', line)
 
-  var prefix
+  let prefix
     , command
     , params
 
   if (line[0] === ':') {
-    var prefixEnd = line.indexOf(' ')
+    let prefixEnd = line.indexOf(' ')
     prefix = line.slice(1, prefixEnd)
     line = line.slice(prefixEnd + 1)
   }
 
-  var colon = line.indexOf(' :')
-    , append
+  let colon = line.indexOf(' :')
   if (colon !== -1) {
-    append = line.slice(colon + 2)
+    let append = line.slice(colon + 2)
     line = line.slice(0, colon)
     params = line.split(/ +/g).concat([ append ])
   }

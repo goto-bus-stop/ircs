@@ -1,23 +1,21 @@
-'use strict'
+import net from 'net'
+import { inherits } from 'util'
+import find from 'array-find'
+import User from './User'
+import Channel from './Channel'
+import Message from './Message'
+import DefaultCommands from './Commands'
+import r from './replies'
 
-var net = require('net')
-  , util = require('util')
-  , find = require('array-find')
-  , User = require('./User')
-  , Channel = require('./Channel')
-  , Message = require('./Message')
-  , DefaultCommands = require('./Commands')
-  , r = require('./replies')
-  , debug = require('debug')('ircs:Server')
+let debug = require('debug')('ircs:Server')
 
-module.exports = Server
 /**
  * Creates a server instance.
  *
  * @see Server
  * @return {Server}
  */
-Server.createServer = function (options, connectionListener) {
+export function createServer(options, connectionListener) {
   return Server(options, connectionListener)
 }
 
@@ -29,7 +27,7 @@ Server.createServer = function (options, connectionListener) {
  *
  * @constructor
  */
-function Server(options, connectionListener) {
+export default function Server(options, connectionListener) {
   if (!(this instanceof Server)) return new Server(options, connectionListener)
 
   options = options || {}
@@ -66,18 +64,18 @@ function Server(options, connectionListener) {
    */
   this.hostname = options.hostname || 'localhost'
 
-  this.on('connection', function (sock) {
+  this.on('connection', sock => {
     var user = User(sock)
     this.users.push(user)
-    user.on('message', function (message) {
+    user.on('message', message => {
       // woo.
       debug('message', message)
       this.execute(user, message)
-    }.bind(this))
-  }.bind(this))
+    })
+  })
 }
 
-util.inherits(Server, net.Server)
+inherits(Server, net.Server)
 
 /**
  * Finds a user by their nickname.
@@ -88,7 +86,7 @@ util.inherits(Server, net.Server)
  */
 Server.prototype.findUser = function (nickname) {
   nickname = normalize(nickname)
-  return find(this.users, function (user) { return normalize(user.nickname) === nickname })
+  return find(this.users, user => normalize(user.nickname) === nickname)
 }
 
 /**
@@ -168,7 +166,7 @@ Server.prototype.send = function (message) {
   if (!(message instanceof Message)) {
     message = Message.apply(null, arguments)
   }
-  this.users.forEach(function (u) { u.send(message) })
+  this.users.forEach(u => { u.send(message) })
 }
 
 /**

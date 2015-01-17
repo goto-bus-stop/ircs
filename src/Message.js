@@ -1,7 +1,3 @@
-'use strict'
-
-module.exports = Message
-
 /**
  * Represents an IRC message.
  *
@@ -11,7 +7,7 @@ module.exports = Message
  *
  * @constructor
  */
-function Message(prefix, command, parameters) {
+export default function Message(prefix, command, parameters) {
   if (!(this instanceof Message)) return new Message(prefix, command, parameters)
   /**
    * Message Prefix. Basically just the sender nickmask.

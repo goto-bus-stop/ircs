@@ -1,10 +1,7 @@
-'use strict'
+import r from './replies'
+import pkg from '../package.json'
 
-var debug = require('debug')('ircs:commands')
-  , r = require('./replies')
-  , pkg = require('../package.json')
-
-module.exports = Commands
+let debug = require('debug')('ircs:commands')
 
 /**
  * Default bare IRC server commands.
@@ -13,7 +10,7 @@ module.exports = Commands
  *
  * @constructor
  */
-function Commands(server) {
+export default function Commands(server) {
   if (!(this instanceof Commands)) return new Commands(server)
 
   /**
@@ -55,7 +52,7 @@ Commands.prototype.USER = function (user, username, hostname, servername, realna
   user.servername = this.server.hostname
   user.realname = realname
 
-  var serverMask = this.server.mask()
+  let serverMask = this.server.mask()
   user.send(serverMask, '001', [ user.nickname, 'Welcome' ])
   user.send(serverMask, '002', [ user.nickname, 'Your host is ' + this.server.hostname + ' running version ' + pkg.version ])
   user.send(serverMask, '003', [ user.nickname, 'This server was created ' + this.server.created ])
@@ -70,14 +67,14 @@ Commands.prototype.USER = function (user, username, hostname, servername, realna
  * @param {string} channelName Name of the channel to join.
  */
 Commands.prototype.JOIN = function (user, channelName) {
-  var channel = this.server.getChannel(channelName)
+  let channel = this.server.getChannel(channelName)
     , mask = this.server.mask()
   channel.join(user)
 
   channel.send(user.mask(), 'JOIN', [ channel.name, user.username, user.realname ])
 
   // Names
-  user.send(mask, r.RPL_NAMREPLY, [ user.nickname, '=', channel.name ].concat(channel.names()))
+  user.send(mask, r.RPL_NAMREPLY, [ user.nickname, '=', channel.name, ...channel.names() ])
   user.send(mask, r.RPL_ENDOFNAMES, [ user.nickname, channel.name, 'End of /NAMES list.' ])
 
   // Topic
@@ -97,7 +94,7 @@ Commands.prototype.JOIN = function (user, channelName) {
  * @param {string} message Good-bye message.
  */
 Commands.prototype.PART = function (user, channelName, message) {
-  var channel = this.server.findChannel(channelName)
+  let channel = this.server.findChannel(channelName)
 
   if (!channel) {
     user.send(user.mask(), r.ERR_NOSUCHCHANNEL, [ channelName, 'No such channel.' ])
@@ -124,9 +121,9 @@ Commands.prototype.PART = function (user, channelName, message) {
  * @param {string} topic New topic.
  */
 Commands.prototype.TOPIC = function (user, channelName, topic) {
-  var channel = this.server.findChannel(channelName)
+  let channel = this.server.findChannel(channelName)
   if (channel) {
-    var mask = this.server.mask()
+    let mask = this.server.mask()
     // no new topic given, → check
     if (topic === undefined) {
       if (channel.topic) {
@@ -159,9 +156,9 @@ Commands.prototype.TOPIC = function (user, channelName, topic) {
  * @param {string} channelName Name of the channel to look at.
  */
 Commands.prototype.NAMES = function (user, channelName) {
-  var channel = this.server.findChannel(channelName)
+  let channel = this.server.findChannel(channelName)
   if (channel) {
-    user.send(this.server.mask(), r.RPL_NAMREPLY, [ user.nickname, '=', channel.name ].concat(channel.names()))
+    user.send(this.server.mask(), r.RPL_NAMREPLY, [ user.nickname, '=', channel.name, ...channel.names() ])
     user.send(this.server.mask(), r.RPL_ENDOFNAMES, [ user.nickname, channel.name, 'End of /NAMES list.' ])
   }
 }
@@ -173,10 +170,10 @@ Commands.prototype.NAMES = function (user, channelName) {
  * @param {string} channelName Name of the channel to look at.
  */
 Commands.prototype.WHO = function (user, channelName) {
-  var channel = this.server.findChannel(channelName)
+  let channel = this.server.findChannel(channelName)
   if (channel) {
-    var mask = this.server.mask()
-    channel.users.forEach(function (u) {
+    let mask = this.server.mask()
+    channel.users.forEach(u => {
       user.send(mask, r.RPL_WHOREPLY, [ user.nickname, channel.name, u.username, u.hostname,
                                         u.servername, u.nickname, 'H', ':0', u.realname ])
     })
@@ -192,7 +189,7 @@ Commands.prototype.WHO = function (user, channelName) {
  * @param {string} content Message content.
  */
 Commands.prototype.PRIVMSG = function (user, targetName, content) {
-  var target
+  let target
   if (targetName[0] === '#' || targetName[0] === '&') {
     target = this.server.findChannel(targetName)
     if (target) {
@@ -218,8 +215,8 @@ Commands.prototype.PRIVMSG = function (user, targetName, content) {
  * @param {string} nickmask Nick mask of the user to find.
  */
 Commands.prototype.WHOIS = function (user, nickmask) {
-  var target = this.server.findUser(nickmask)
-  var mask = this.server.mask()
+  let target = this.server.findUser(nickmask)
+    , mask = this.server.mask()
   if (target) {
     user.send(mask, r.RPL_WHOISUSER, [ user.nickname, target.username, target.hostname, '*', user.realname ])
     user.send(mask, r.RPL_WHOISSERVER, [ user.nickname, target.username, target.servername, '' ])
