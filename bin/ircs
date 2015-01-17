@@ -1,0 +1,5 @@
+#!/usr/bin/env node
+
+var Server = require('../lib/Server')
+
+Server().listen(6667)
