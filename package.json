@@ -1,15 +1,19 @@
 { "name": "ircs"
 , "description": "IRC Server library in Node.js"
-, "version": "0.0.1"
+, "version": "0.1.0"
 , "license": "MIT"
 , "keywords": [ "irc", "server" ]
 , "bugs": "https://github.com/goto-bus-stop/ircs/issues"
 , "author": "goto-bus-stop <rene@kooi.me>"
-, "main": "src/Server"
+, "main": "lib/Server"
 , "dependencies":
   { "split": "^0.3.2"
   , "array-find": "^0.1.1"
   , "es6-map": "^0.1.1" }
+, "devDependencies":
+  { "6to5": "2.x" }
+, "scripts":
+  { "6to5": "node ./node_modules/6to5/bin/6to5/index.js --out-dir lib src" }
 , "repository":
   { "type": "git"
   , "url" : "http://github.com/goto-bus-stop/ircs.git"
