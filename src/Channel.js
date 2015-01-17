@@ -9,6 +9,8 @@ module.exports = Channel
  * Represents an IRC Channel on the server.
  *
  * @param {string} name Channel name. (Starting with # or &, preferably.)
+ *
+ * @constructor
  */
 function Channel(name) {
   if (!(this instanceof Channel)) return new Channel(name)

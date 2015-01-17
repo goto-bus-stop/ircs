@@ -10,10 +10,16 @@ module.exports = Commands
  * Default bare IRC server commands.
  *
  * @param {Server} server Which IRC Server instance these commands run on.
+ *
+ * @constructor
  */
 function Commands(server) {
   if (!(this instanceof Commands)) return new Commands(server)
 
+  /**
+   * The IRC server instance that these commands apply to.
+   * @member {Server}
+   */
   this.server = server
 }
 

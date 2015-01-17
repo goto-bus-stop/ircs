@@ -12,6 +12,8 @@ module.exports = User
  * Represents a User on the server.
  *
  * @param {stream.Duplex} sock Duplex Stream to read & write commands from & to.
+ *
+ * @constructor
  */
 function User(sock) {
   if (!(this instanceof User)) return new User(sock)

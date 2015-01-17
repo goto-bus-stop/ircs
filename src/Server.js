@@ -11,6 +11,12 @@ var net = require('net')
   , debug = require('debug')('ircs:Server')
 
 module.exports = Server
+/**
+ * Creates a server instance.
+ *
+ * @see Server
+ * @return {Server}
+ */
 Server.createServer = function (options, connectionListener) {
   return Server(options, connectionListener)
 }
@@ -20,6 +26,8 @@ Server.createServer = function (options, connectionListener) {
  *
  * @param {Object} options `net.Server` options.
  * @param {function()} connectionListener `net.Server` connection listener.
+ *
+ * @constructor
  */
 function Server(options, connectionListener) {
   if (!(this instanceof Server)) return new Server(options, connectionListener)
@@ -28,12 +36,34 @@ function Server(options, connectionListener) {
 
   net.Server.call(this, options, connectionListener)
 
+  /**
+   * Time when the server booted.
+   * @member {Date}
+   */
   this.created = new Date()
 
+  /**
+   * Known Commands.
+   * @member {Object.<string, function()>}
+   */
   this.commands = DefaultCommands(this)
+
+  /**
+   * Users online on the server.
+   * @member {Array.<User>}
+   */
   this.users = []
+
+  /**
+   * Channels on the server.
+   * @member {Object.<string, Channel>}
+   */
   this.channels = {}
 
+  /**
+   * Server hostname.
+   * @member {string}
+   */
   this.hostname = options.hostname || 'localhost'
 
   this.on('connection', function (sock) {

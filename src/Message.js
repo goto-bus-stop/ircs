@@ -8,11 +8,25 @@ module.exports = Message
  * @param {string|null} prefix Message prefix. (Optional.)
  * @param {string} command Command name.
  * @param {Array.<string>} parameters IRC Command parameters.
+ *
+ * @constructor
  */
 function Message(prefix, command, parameters) {
   if (!(this instanceof Message)) return new Message(prefix, command, parameters)
+  /**
+   * Message Prefix. Basically just the sender nickmask.
+   * @member {string}
+   */
   this.prefix = prefix
+  /**
+   * Command, i.e. what this message actually means to us!
+   * @member {string}
+   */
   this.command = command
+  /**
+   * Parameters given to this command.
+   * @member {Array.<string>}
+   */
   this.parameters = parameters
 
   if (parameters) {
