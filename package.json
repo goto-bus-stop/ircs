@@ -12,9 +12,9 @@
   , "array-find": "^0.1.1"
   , "es6-map": "^0.1.1" }
 , "devDependencies":
-  { "6to5": "2.x" }
+  { "babel": "4.x" }
 , "scripts":
-  { "6to5": "node ./node_modules/6to5/bin/6to5/index.js --out-dir lib src"
+  { "babel": "node ./node_modules/babel/bin/babel/index.js --out-dir lib src"
   , "start": "node ./bin/ircs" }
 , "repository":
   { "type": "git"
