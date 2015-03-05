@@ -7,8 +7,8 @@ describe('MessageParser', function () {
     var i = 0
     MessageParser()
       .on('data', function (d) { i++ })
-      .on('close', function () { assert.equal(i, 3), done() })
-      .end('CAP LS\r\nPASS my_password\r\nUSER test_user 0 * :Real Name')
+      .on('finish', function () { assert.equal(i, 3), done() })
+      .end('CAP LS\r\nPASS my_password\r\nUSER test_user 0 * :Real Name\r\n')
   })
 
   it('reads simple incoming commands correctly', function () {

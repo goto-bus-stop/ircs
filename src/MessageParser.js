@@ -1,5 +1,6 @@
 import Message from './Message'
-import split from 'split'
+import { Transform } from 'stream'
+import { inherits } from 'util'
 
 let debug = require('debug')('ircs:MessageParser')
 
@@ -7,7 +8,26 @@ let debug = require('debug')('ircs:MessageParser')
  * Turns a stream of plain text IRC commands into a stream of IRC Message objects.
  */
 export default function MessageParser() {
-  return split('\r\n', MessageParser.prototype.parse)
+  if (!(this instanceof MessageParser)) return new MessageParser()
+  Transform.call(this, { decodeStrings: false })
+
+  this._readableState.objectMode = true
+
+  this._buffer = ''
+}
+
+inherits(MessageParser, Transform)
+
+MessageParser.prototype._transform = function (chunk, enc, cb) {
+  chunk = this._buffer + chunk
+
+  let pieces = chunk.split('\r\n')
+  this._buffer = pieces.pop()
+
+
+  pieces.forEach(line => this.push(this.parse(line)))
+
+  cb()
 }
 
 /**
