@@ -1,10 +1,11 @@
 import net from 'net'
 import { inherits } from 'util'
 import find from 'array-find'
+import assign from 'object-assign'
 import User from './User'
 import Channel from './Channel'
 import Message from './Message'
-import DefaultCommands from './Commands'
+import defaultCommands from './defaultCommands'
 import r from './replies'
 
 let debug = require('debug')('ircs:Server')
@@ -15,8 +16,14 @@ let debug = require('debug')('ircs:Server')
  * @see Server
  * @return {Server}
  */
-export function createServer(options, connectionListener) {
+Server.createServer = function createServer(options, connectionListener) {
   return Server(options, connectionListener)
+}
+
+Server.defaultOptions = function () {
+  return {
+    useDefaultCommands: true
+  }
 }
 
 /**
@@ -30,49 +37,29 @@ export function createServer(options, connectionListener) {
 export default function Server(options, connectionListener) {
   if (!(this instanceof Server)) return new Server(options, connectionListener)
 
-  options = options || {}
+  options = assign(Server.defaultOptions(), options)
 
   net.Server.call(this, options, connectionListener)
 
-  /**
-   * Time when the server booted.
-   * @member {Date}
-   */
   this.created = new Date()
-
-  /**
-   * Known Commands.
-   * @member {Object.<string, function()>}
-   */
-  this.commands = DefaultCommands(this)
-
-  /**
-   * Users online on the server.
-   * @member {Array.<User>}
-   */
+  this._middleware = []
   this.users = []
-
-  /**
-   * Channels on the server.
-   * @member {Object.<string, Channel>}
-   */
   this.channels = {}
-
-  /**
-   * Server hostname.
-   * @member {string}
-   */
   this.hostname = options.hostname || 'localhost'
 
   this.on('connection', sock => {
-    var user = User(sock)
+    const user = User(sock)
     this.users.push(user)
     user.on('message', message => {
       // woo.
       debug('message', message)
-      this.execute(user, message)
+      this.execute(message)
     })
   })
+
+  if (options.useDefaults) {
+    defaultCommands(this)
+  }
 }
 
 inherits(Server, net.Server)
@@ -135,24 +122,21 @@ Server.prototype.hasChannel = function (channelName) {
   return normalize(channelName) in this.channels
 }
 
-/**
- * Execute an IRC command.
- *
- * Sends an ERR_UNKNOWNCOMMAND back to the user, if the command was not found.
- *
- * @param {User} user User to execute as.
- * @param {Message} message Message containing the command to execute.
- */
-Server.prototype.execute = function (user, message) {
-  var command = message.command.toUpperCase()
-    , handle = this.commands[command]
+Server.prototype.use = function (command, fn) {
+  if (!fn) {
+    [ command, fn ] = [ '', command ]
+  }
+  this._middleware.push({ command, fn })
+}
 
-  if (handle) {
-    handle.apply(this.commands, [ user ].concat(message.parameters))
-  }
-  else {
-    user.send(this.mask(), r.ERR_UNKNOWNCOMMAND, [ user.nickname, command, 'Unknown command.' ])
-  }
+Server.prototype.execute = function (message) {
+  debug('exec', message)
+  this._middleware.forEach(mw => {
+    if (mw.command === '' || mw.command === message.command) {
+      debug('  exec', mw)
+      mw.fn(message)
+    }
+  })
 }
 
 /**

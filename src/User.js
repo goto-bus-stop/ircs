@@ -36,6 +36,7 @@ inherits(User, EventEmitter)
  */
 User.prototype.onReceive = function (message) {
   debug('receive', message + '')
+  message.user = this
   this.emit('message', message)
 }
 

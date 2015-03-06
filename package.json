@@ -1,6 +1,6 @@
 { "name": "ircs"
 , "description": "IRC Server library in Node.js"
-, "version": "0.1.1"
+, "version": "0.2.0"
 , "license": "MIT"
 , "keywords": [ "irc", "server" ]
 , "bugs": "https://github.com/goto-bus-stop/ircs/issues"
@@ -9,7 +9,8 @@
 , "bin": "bin/ircs"
 , "dependencies":
   { "array-find": "^0.1.1"
-  , "es6-map": "^0.1.1" }
+  , "es6-map": "^0.1.1"
+  , "object-assign": "2.x" }
 , "devDependencies":
   { "babel": "4.x" }
 , "scripts":
