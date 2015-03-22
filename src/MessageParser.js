@@ -24,7 +24,6 @@ MessageParser.prototype._transform = function (chunk, enc, cb) {
   let pieces = chunk.split('\r\n')
   this._buffer = pieces.pop()
 
-
   pieces.forEach(line => this.push(this.parse(line)))
 
   cb()

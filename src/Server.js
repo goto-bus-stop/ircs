@@ -48,11 +48,12 @@ export default function Server(options, connectionListener) {
   this.hostname = options.hostname || 'localhost'
 
   this.on('connection', sock => {
+    debug('incoming connection', sock.remoteAddress)
     const user = User(sock)
     this.users.push(user)
-    user.on('message', message => {
+    user.on('data', message => {
       // woo.
-      debug('message', message)
+      debug('message', message + '')
       this.execute(message)
     })
   })
@@ -60,6 +61,8 @@ export default function Server(options, connectionListener) {
   if (options.useDefaults) {
     defaultCommands(this)
   }
+
+  debug('server started')
 }
 
 inherits(Server, net.Server)
@@ -130,7 +133,7 @@ Server.prototype.use = function (command, fn) {
 }
 
 Server.prototype.execute = function (message) {
-  debug('exec', message)
+  debug('exec', message + '')
   this._middleware.forEach(mw => {
     if (mw.command === '' || mw.command === message.command) {
       debug('  exec', mw)

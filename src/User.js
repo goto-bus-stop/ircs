@@ -1,9 +1,9 @@
 'use strict'
 
-import { EventEmitter } from 'events'
 import { inherits } from 'util'
 import MessageParser from './MessageParser'
 import Message from './Message'
+import { Duplex } from 'stream'
 
 let debug = require('debug')('ircs:User')
 
@@ -17,27 +17,34 @@ let debug = require('debug')('ircs:User')
 export default function User(sock) {
   if (!(this instanceof User)) return new User(sock)
 
-  EventEmitter.call(this)
+  Duplex.call(this)
+
+  this._readableState.objectMode = true
+  this._writableState.objectMode = true
 
   this.sock = sock
   this.nickname = null
   this.hostname = sock.remoteAddress
+  this.messages = MessageParser()
 
-  sock.pipe(MessageParser()).on('data', this.onReceive.bind(this))
+  sock.pipe(this.messages).on('data', this.onReceive.bind(this))
 }
-inherits(User, EventEmitter)
+inherits(User, Duplex)
 
-/**
- * Process a message sent by this user.
- *
- * Just fires an event so the Server can handle it.
- *
- * @param {Message} message Received Message.
- */
 User.prototype.onReceive = function (message) {
   debug('receive', message + '')
   message.user = this
-  this.emit('message', message)
+  message.prefix = this.mask()
+  this.push(message)
+}
+
+User.prototype._read = function () {
+}
+
+User.prototype._write = function (message, enc, cb) {
+  debug('write', message + '')
+  this.sock.write(message + '\r\n')
+  cb()
 }
 
 /**
@@ -50,7 +57,7 @@ User.prototype.send = function (message) {
     message = Message.apply(null, arguments)
   }
   debug('send', message + '')
-  this.sock.write(message + '\r\n')
+  this.write(message)
 }
 
 /**
