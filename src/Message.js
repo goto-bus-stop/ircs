@@ -37,11 +37,11 @@ Message.prototype.toString = function () {
   if (parameters.length) {
     let last = parameters[parameters.length - 1]
     if (last && last.indexOf(' ') !== -1) {
-      parameters[parameters.length - 1] = ':' + parameters[parameters.length - 1]
+      parameters[parameters.length - 1] = `:${parameters[parameters.length - 1]}`
     }
   }
 
-  return (this.prefix ? ':' + this.prefix + ' ' : '') +
+  return (this.prefix ? `:${this.prefix} ` : '') +
          this.command +
-         (parameters.length ? ' ' + parameters.join(' ') : '')
+         (parameters.length ? ` ${parameters.join(' ')}` : '')
 }

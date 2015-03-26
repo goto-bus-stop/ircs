@@ -27,7 +27,13 @@ export default function User(sock) {
   this.hostname = sock.remoteAddress
   this.messages = MessageParser()
 
-  sock.pipe(this.messages).on('data', this.onReceive.bind(this))
+  // TODO use duplexify or similar
+  sock.pipe(this.messages).on('readable', () => {
+    let message = this.messages.read()
+    if (message) {
+      this.onReceive(message)
+    }
+  })
 }
 inherits(User, Duplex)
 
@@ -43,7 +49,7 @@ User.prototype._read = function () {
 
 User.prototype._write = function (message, enc, cb) {
   debug('write', message + '')
-  this.sock.write(message + '\r\n')
+  this.sock.write(`${message}\r\n`)
   cb()
 }
 
@@ -83,10 +89,10 @@ User.prototype.mask = function () {
   if (this.nickname) {
     mask += this.nickname
     if (this.username) {
-      mask += '!' + this.username
+      mask += `!${this.username}`
     }
     if (this.hostname) {
-      mask += '@' + this.hostname
+      mask += `@${this.hostname}`
     }
   }
   return mask || false

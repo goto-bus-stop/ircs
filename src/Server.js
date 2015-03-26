@@ -51,10 +51,13 @@ export default function Server(options, connectionListener) {
     debug('incoming connection', sock.remoteAddress)
     const user = User(sock)
     this.users.push(user)
-    user.on('data', message => {
-      // woo.
-      debug('message', message + '')
-      this.execute(message)
+    user.on('readable', () => {
+      let message = user.read()
+      if (message) {
+        // woo.
+        debug('message', message + '')
+        this.execute(message)
+      }
     })
   })
 

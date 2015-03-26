@@ -33,7 +33,7 @@ Channel.prototype.join = function (user) {
  * @param {User} user Parting user.
  */
 Channel.prototype.part = function (user) {
-  var i = this.users.indexOf(user)
+  let i = this.users.indexOf(user)
   if (i !== -1) {
     this.users.splice(i, 1)
   }
