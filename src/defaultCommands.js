@@ -36,7 +36,8 @@ export default function (ircs) {
     channel.send(user.mask(), 'JOIN', [ channel.name, user.username, user.realname ])
 
     // Names
-    user.send(mask, r.RPL_NAMREPLY, [ user.nickname, '=', channel.name, ...channel.names() ])
+    let names = channel.users.map(u => u.nickname)
+    user.send(mask, r.RPL_NAMREPLY, [ user.nickname, '=', channel.name, ...names ])
     user.send(mask, r.RPL_ENDOFNAMES, [ user.nickname, channel.name, 'End of /NAMES list.' ])
 
     // Topic
@@ -101,7 +102,8 @@ export default function (ircs) {
   ircs.use('NAMES', function ({ user, parameters: [ channelName ] }) {
     let channel = ircs.findChannel(channelName)
     if (channel) {
-      user.send(ircs.mask(), r.RPL_NAMREPLY, [ user.nickname, '=', channel.name, ...channel.names() ])
+      let names = channel.users.map(u => u.nickname)
+      user.send(ircs.mask(), r.RPL_NAMREPLY, [ user.nickname, '=', channel.name, ...names ])
       user.send(ircs.mask(), r.RPL_ENDOFNAMES, [ user.nickname, channel.name, 'End of /NAMES list.' ])
     }
   })

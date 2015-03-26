@@ -84,12 +84,3 @@ Channel.prototype.setMode = function (user, mode) {
 Channel.prototype.getMode = function (user) {
   return this.modes.get(user)
 }
-
-/**
- * Returns the nicknames of all users in this channel.
- *
- * @return {Array.<string>} Names.
- */
-Channel.prototype.names = function () {
-  return this.users.map(user => user.nickname)
-}
