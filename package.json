@@ -1,6 +1,6 @@
 { "name": "ircs"
 , "description": "IRC Server library in Node.js"
-, "version": "0.2.0"
+, "version": "0.2.1"
 , "license": "MIT"
 , "keywords": [ "irc", "server" ]
 , "bugs": "https://github.com/goto-bus-stop/ircs/issues"
@@ -12,10 +12,14 @@
   , "es6-map": "^0.1.1"
   , "object-assign": "2.x" }
 , "devDependencies":
-  { "babel": "4.x" }
+  { "babel": "4.x"
+  , "irc": "0.3.x"
+  , "jscs": "1.x" }
 , "scripts":
   { "babel": "node ./node_modules/babel/bin/babel/index.js --out-dir lib src"
-  , "start": "node ./bin/ircs" }
+  , "jscs": "node ./node_modules/jscs/bin/jscs --esnext src"
+  , "start": "node ./bin/ircs"
+  , "test": "mocha -r babel/register" }
 , "repository":
   { "type": "git"
   , "url" : "http://github.com/goto-bus-stop/ircs.git"
