@@ -12,25 +12,25 @@ export default function (ircs) {
 
   // Specifies username, hostname, servername and real name for a user.
   // Currently also sends a welcome message back to the user (should change)
-  ircs.use('USER', function ({ user, parameters: [ username, hostname, servername, realname ] }) {
+  ircs.use('USER', function ({ user, server, parameters: [ username, hostname, servername, realname ] }) {
     debug('USER', user.mask(), username, hostname, servername, realname)
 
     user.username = username
-    user.servername = ircs.hostname
+    user.servername = server.hostname
     user.realname = realname
 
-    let serverMask = ircs.mask()
+    let serverMask = server.mask()
     user.send(serverMask, '001', [ user.nickname, 'Welcome' ])
-    user.send(serverMask, '002', [ user.nickname, 'Your host is ' + ircs.hostname + ' running version ' + pkg.version ])
-    user.send(serverMask, '003', [ user.nickname, 'This server was created ' + ircs.created ])
+    user.send(serverMask, '002', [ user.nickname, 'Your host is ' + server.hostname + ' running version ' + pkg.version ])
+    user.send(serverMask, '003', [ user.nickname, 'This server was created ' + server.created ])
     user.send(serverMask, '004', [ user.nickname, pkg.name, pkg.version ])
     user.send(serverMask, 'MODE', [ user.nickname, '+w' ])
   })
 
   // Joins a channel.
-  ircs.use('JOIN', function ({ user, parameters: [ channelName ] }) {
-    let channel = ircs.getChannel(channelName)
-      , mask = ircs.mask()
+  ircs.use('JOIN', function ({ user, server, parameters: [ channelName ] }) {
+    let channel = server.getChannel(channelName)
+      , mask = server.mask()
     channel.join(user)
 
     channel.send(user.mask(), 'JOIN', [ channel.name, user.username, user.realname ])
@@ -50,8 +50,8 @@ export default function (ircs) {
   })
 
   // Parts a channel.
-  ircs.use('PART', function ({ user, parameters: [ channelName, message ] }) {
-    let channel = ircs.findChannel(channelName)
+  ircs.use('PART', function ({ user, server, parameters: [ channelName, message ] }) {
+    let channel = server.findChannel(channelName)
 
     if (!channel) {
       user.send(user.mask(), r.ERR_NOSUCHCHANNEL, [ channelName, 'No such channel.' ])
@@ -69,10 +69,10 @@ export default function (ircs) {
   })
 
   // Sets channel topics.
-  ircs.use('TOPIC', function ({ user, parameters: [ channelName, topic ] }) {
-    let channel = ircs.findChannel(channelName)
+  ircs.use('TOPIC', function ({ user, server, parameters: [ channelName, topic ] }) {
+    let channel = server.findChannel(channelName)
     if (channel) {
-      let mask = ircs.mask()
+      let mask = server.mask()
       // no new topic given, → check
       if (topic === undefined) {
         if (channel.topic) {
@@ -99,20 +99,20 @@ export default function (ircs) {
   })
 
   // Replies with the names of all users in a channel.
-  ircs.use('NAMES', function ({ user, parameters: [ channelName ] }) {
-    let channel = ircs.findChannel(channelName)
+  ircs.use('NAMES', function ({ user, server, parameters: [ channelName ] }) {
+    let channel = server.findChannel(channelName)
     if (channel) {
       let names = channel.users.map(u => u.nickname)
-      user.send(ircs.mask(), r.RPL_NAMREPLY, [ user.nickname, '=', channel.name, ...names ])
-      user.send(ircs.mask(), r.RPL_ENDOFNAMES, [ user.nickname, channel.name, 'End of /NAMES list.' ])
+      user.send(server.mask(), r.RPL_NAMREPLY, [ user.nickname, '=', channel.name, ...names ])
+      user.send(server.mask(), r.RPL_ENDOFNAMES, [ user.nickname, channel.name, 'End of /NAMES list.' ])
     }
   })
 
   // Replies with more info about users in a channel.
-  ircs.use('WHO', function ({ user, parameters: [ channelName ] }) {
-    let channel = ircs.findChannel(channelName)
+  ircs.use('WHO', function ({ user, server, parameters: [ channelName ] }) {
+    let channel = server.findChannel(channelName)
     if (channel) {
-      let mask = ircs.mask()
+      let mask = server.mask()
       channel.users.forEach(u => {
         user.send(mask, r.RPL_WHOREPLY, [ user.nickname, channel.name, u.username, u.hostname
                                         , u.servername, u.nickname, 'H', ':0', u.realname ])
@@ -122,30 +122,30 @@ export default function (ircs) {
   })
 
   // Sends a message to a user or channel.
-  ircs.use('PRIVMSG', function ({ user, parameters: [ targetName, content ] }) {
+  ircs.use('PRIVMSG', function ({ user, server, parameters: [ targetName, content ] }) {
     let target
     if (targetName[0] === '#' || targetName[0] === '&') {
-      target = ircs.findChannel(targetName)
+      target = server.findChannel(targetName)
       if (target) {
         target.broadcast(user.mask(), 'PRIVMSG', [ target.name, content ])
       }
     }
     else {
-      target = ircs.findUser(targetName)
+      target = server.findUser(targetName)
       if (target) {
         target.send(user.mask(), 'PRIVMSG', [ target.nickname, content ])
       }
     }
 
     if (!target) {
-      user.send(ircs.mask(), r.ERR_NOSUCHNICK, [ user.nickname, targetName, 'No such nick/channel' ])
+      user.send(server.mask(), r.ERR_NOSUCHNICK, [ user.nickname, targetName, 'No such nick/channel' ])
     }
   })
 
   // IRC /WHOIS command.
-  ircs.use('WHOIS', function ({ user, parameters: [ nickmask ] }) {
-    let target = ircs.findUser(nickmask)
-      , mask = ircs.mask()
+  ircs.use('WHOIS', function ({ user, server, parameters: [ nickmask ] }) {
+    let target = server.findUser(nickmask)
+      , mask = server.mask()
     if (target) {
       user.send(mask, r.RPL_WHOISUSER, [ user.nickname, target.username, target.hostname, '*', user.realname ])
       user.send(mask, r.RPL_WHOISSERVER, [ user.nickname, target.username, target.servername, '' ])

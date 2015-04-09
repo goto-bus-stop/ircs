@@ -137,6 +137,7 @@ Server.prototype.use = function (command, fn) {
 
 Server.prototype.execute = function (message) {
   debug('exec', message + '')
+  message.server = this
   this._middleware.forEach(mw => {
     if (mw.command === '' || mw.command === message.command) {
       debug('  exec', mw)
