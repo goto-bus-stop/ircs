@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
 var Server = require('../lib/Server')
+var commands = require('../lib/defaultCommands')
 
-Server().listen(6667)
+commands(Server().listen(6667))
