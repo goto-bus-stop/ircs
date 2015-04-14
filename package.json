@@ -16,10 +16,10 @@
   , "irc": "0.3.x"
   , "jscs": "1.x" }
 , "scripts":
-  { "babel": "node ./node_modules/babel/bin/babel/index.js --out-dir lib src"
-  , "jscs": "node ./node_modules/jscs/bin/jscs --esnext src"
+  { "babel": "./node_modules/.bin/babel --out-dir lib src"
+  , "jscs": "./node_modules/.bin/jscs --esnext src"
   , "start": "node ./bin/ircs"
-  , "test": "mocha -r babel/register" }
+  , "test": "mocha --compilers js:babel/register" }
 , "repository":
   { "type": "git"
   , "url" : "http://github.com/goto-bus-stop/ircs.git"
