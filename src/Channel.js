@@ -25,6 +25,7 @@ export default function Channel(name) {
  */
 Channel.prototype.join = function (user) {
   this.users.push(user)
+  user.channels.push(this)
 }
 
 /**
@@ -36,6 +37,10 @@ Channel.prototype.part = function (user) {
   let i = this.users.indexOf(user)
   if (i !== -1) {
     this.users.splice(i, 1)
+  }
+  i = user.channels.indexOf(this)
+  if (i !== -1) {
+    user.channels.splice(i, 1)
   }
 }
 

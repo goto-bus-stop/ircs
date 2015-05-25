@@ -26,6 +26,7 @@ export default function User(sock) {
   this.nickname = null
   this.hostname = sock.remoteAddress
   this.messages = MessageParser()
+  this.channels = []
 
   // TODO use duplexify or similar
   sock.pipe(this.messages).on('readable', () => {
