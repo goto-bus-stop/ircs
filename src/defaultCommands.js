@@ -7,6 +7,7 @@ import names from './commands/names'
 import who from './commands/who'
 import whois from './commands/whois'
 import privmsg from './commands/privmsg'
+import quit from './commands/quit'
 
 const debug = require('debug')('ircs:default-commands')
 
@@ -38,5 +39,8 @@ export default function (ircs) {
 
   // Sends a message to a user or channel.
   ircs.use('PRIVMSG', privmsg)
+
+  // Disconnects.
+  ircs.use('QUIT', quit)
 
 }
