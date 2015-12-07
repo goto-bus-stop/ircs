@@ -12,7 +12,7 @@
   , "es6-map": "^0.1.1"
   , "object-assign": "2.x" }
 , "devDependencies":
-  { "babel": "4.x"
+  { "babel": "5.x"
   , "irc": "0.3.x"
   , "jscs": "1.x" }
 , "scripts":
