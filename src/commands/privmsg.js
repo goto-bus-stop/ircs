@@ -1,4 +1,6 @@
-import r from '../replies'
+import {
+  ERR_NOSUCHNICK
+} from '../replies'
 
 export default function ({ user, server, parameters: [ targetName, content ] }) {
   let target
@@ -16,6 +18,6 @@ export default function ({ user, server, parameters: [ targetName, content ] }) 
   }
 
   if (!target) {
-    user.send(server.mask(), r.ERR_NOSUCHNICK, [ user.nickname, targetName, 'No such nick/channel' ])
+    user.send(server.mask(), ERR_NOSUCHNICK, [ user.nickname, targetName, 'No such nick/channel' ])
   }
 }

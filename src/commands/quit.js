@@ -1,5 +1,3 @@
-import r from '../replies'
-
 export default function ({ user, server, parameters: [ message ] }) {
   message = message || user.nickname
 

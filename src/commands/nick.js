@@ -1,4 +1,7 @@
-import r from '../replies'
+import {
+  ERR_NONICKNAMEGIVEN,
+  ERR_NICKNAMEINUSE
+} from '../replies'
 
 const debug = require('debug')('ircs:commands:nick')
 
@@ -15,7 +18,7 @@ export default function ({ user, server, parameters: [ nickname ] }) {
     return
   }
   if (!nickname || nickname.length === 0) {
-    return user.send(server.mask(), r.ERR_NONICKNAMEGIVEN
+    return user.send(server.mask(), ERR_NONICKNAMEGIVEN
                     , [ 'No nickname given' ])
   }
 
@@ -23,7 +26,7 @@ export default function ({ user, server, parameters: [ nickname ] }) {
   if (server.users.some(us => us.nickname
                            && us.nickname.toLowerCase() === lnick
                            && us !== user)) {
-    return user.send(server.mask(), r.ERR_NICKNAMEINUSE
+    return user.send(server.mask(), ERR_NICKNAMEINUSE
                     , [ user.nickname, nickname, 'Nickname is already in use' ])
   }
 
