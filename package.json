@@ -10,6 +10,7 @@
 , "bin": "bin/ircs"
 , "dependencies":
   { "array-find": "^0.1.1"
+  , "each-async": "^1.1.1"
   , "es6-map": "^0.1.1"
   , "object-assign": "2.x" }
 , "devDependencies":
