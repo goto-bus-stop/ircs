@@ -1,24 +1,32 @@
-{ "name": "ircs"
-, "description": "IRC Server library in Node.js"
-, "version": "0.2.5"
-, "license": "MIT"
-, "keywords": [ "irc", "server" ]
-, "repository": "goto-bus-stop/ircs"
-, "bugs": "https://github.com/goto-bus-stop/ircs/issues"
-, "author": "goto-bus-stop <rene@kooi.me>"
-, "main": "lib/Server"
-, "bin": "bin/ircs"
-, "dependencies":
-  { "array-find": "^0.1.1"
-  , "each-async": "^1.1.1"
-  , "es6-map": "^0.1.1"
-  , "object-assign": "2.x" }
-, "devDependencies":
-  { "babel": "5.x"
-  , "irc": "0.3.x"
-  , "jscs": "1.x" }
-, "scripts":
-  { "babel": "babel --out-dir lib src"
-  , "jscs": "jscs --esnext src"
-  , "start": "node ./bin/ircs"
-  , "test": "mocha --compilers js:babel/register" } }
+{
+  "name": "ircs",
+  "description": "IRC Server library in Node.js",
+  "version": "0.2.5",
+  "license": "MIT",
+  "keywords": [
+    "irc",
+    "server"
+  ],
+  "repository": "goto-bus-stop/ircs",
+  "bugs": "https://github.com/goto-bus-stop/ircs/issues",
+  "author": "goto-bus-stop <rene@kooi.me>",
+  "main": "lib/Server",
+  "bin": "bin/ircs",
+  "dependencies": {
+    "array-find": "^1.0.0",
+    "each-async": "^1.1.1",
+    "es6-map": "^0.1.1",
+    "object-assign": "4.0.1"
+  },
+  "devDependencies": {
+    "babel": "6.5.2",
+    "irc": "0.5.0",
+    "jscs": "3.0.3"
+  },
+  "scripts": {
+    "babel": "babel --out-dir lib src",
+    "jscs": "jscs --esnext src",
+    "start": "node ./bin/ircs",
+    "test": "mocha --compilers js:babel/register"
+  }
+}
