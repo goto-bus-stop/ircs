@@ -14,6 +14,7 @@
   "bin": "bin/ircs",
   "dependencies": {
     "array-find": "^1.0.0",
+    "debug": "^2.2.0",
     "each-async": "^1.1.1",
     "es6-map": "^0.1.1",
     "object-assign": "4.0.1"
@@ -29,15 +30,18 @@
     "gulp-util": "^3.0.7",
     "gulp-watch": "^4.3.5",
     "irc": "0.5.0",
+    "mocha": "^2.4.5",
     "standard": "^7.1.0",
     "through2": "^2.0.1"
   },
   "scripts": {
+    "prepublish": "npm run build",
     "babel": "gulp build",
     "build": "gulp build",
-    "lint": "standard src/**/*.js gulpfile.js",
     "watch": "gulp watch",
     "start": "node ./bin/ircs",
-    "test": "mocha --compilers js:babel-register"
+    "lint": "standard src/**/*.js gulpfile.js",
+    "mocha": "mocha --compilers js:babel-register",
+    "test": "npm run mocha && npm run lint"
   }
 }
