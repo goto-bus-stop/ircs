@@ -35,6 +35,7 @@
     "through2": "^2.0.1"
   },
   "scripts": {
+    "prepublish": "npm run build",
     "babel": "gulp build",
     "build": "gulp build",
     "watch": "gulp watch",
