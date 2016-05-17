@@ -13,8 +13,7 @@ export default function ({ user, server, parameters: [ channelName, topic ] }) {
     if (topic === undefined) {
       if (channel.topic) {
         user.send(mask, RPL_TOPIC, [ user.nickname, channel.name, channel.topic ])
-      }
-      else {
+      } else {
         user.send(mask, RPL_NOTOPIC, [ user.nickname, channel.name, 'No topic is set.' ])
       }
       return
@@ -30,6 +29,6 @@ export default function ({ user, server, parameters: [ channelName, topic ] }) {
     }
     // empty string for topic, → clear
     channel.topic = topic === '' ? null : topic
-    channel.send(user.mask(), 'TOPIC', [ channel.name, topic === '' ? ':' : topic  ])
+    channel.send(user.mask(), 'TOPIC', [ channel.name, topic === '' ? ':' : topic ])
   }
 }

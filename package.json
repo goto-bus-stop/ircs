@@ -29,14 +29,14 @@
     "gulp-util": "^3.0.7",
     "gulp-watch": "^4.3.5",
     "irc": "0.5.0",
-    "jscs": "3.0.3",
+    "standard": "^7.1.0",
     "through2": "^2.0.1"
   },
   "scripts": {
     "babel": "gulp build",
     "build": "gulp build",
+    "lint": "standard src/**/*.js gulpfile.js",
     "watch": "gulp watch",
-    "jscs": "jscs --esnext src",
     "start": "node ./bin/ircs",
     "test": "mocha --compilers js:babel-register"
   }

@@ -9,8 +9,7 @@ export default function ({ user, server, parameters: [ targetName, content ] }) 
     if (target) {
       target.broadcast(user.mask(), 'PRIVMSG', [ target.name, content ])
     }
-  }
-  else {
+  } else {
     target = server.findUser(targetName)
     if (target) {
       target.send(user.mask(), 'PRIVMSG', [ target.nickname, content ])
