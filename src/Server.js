@@ -2,6 +2,7 @@ import net from 'net'
 import { inherits } from 'util'
 import find from 'array-find'
 import assign from 'object-assign'
+import each from 'each-async'
 import User from './User'
 import Channel from './Channel'
 import Message from './Message'
@@ -132,18 +133,24 @@ Server.prototype.use = function (command, fn) {
   if (!fn) {
     [ command, fn ] = [ '', command ]
   }
+  debug('register middleware', command);
   this._middleware.push({ command, fn })
 }
 
-Server.prototype.execute = function (message) {
+Server.prototype.execute = function (message, cb) {
   debug('exec', message + '')
   message.server = this
-  this._middleware.forEach(mw => {
+  each(this._middleware, (mw, idx, next) => {
     if (mw.command === '' || mw.command === message.command) {
-      debug('  exec', mw)
-      mw.fn(message)
+      debug('executing', mw.command, message.parameters)
+      if (mw.fn.length < 2) {
+        mw.fn(message)
+        next(null)
+      } else {
+        mw.fn(message, next)
+      }
     }
-  })
+  }, cb)
 }
 
 /**
