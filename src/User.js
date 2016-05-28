@@ -35,6 +35,10 @@ export default function User(sock) {
       this.onReceive(message)
     }
   })
+
+  sock.on('end', () => {
+    this.onReceive(Message(null, 'QUIT', []))
+  })
 }
 inherits(User, Duplex)
 
