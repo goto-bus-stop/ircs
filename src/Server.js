@@ -61,7 +61,7 @@ export default function Server(options, connectionListener) {
     })
   })
 
-  if (options.useDefaults) {
+  if (options.useDefaultCommands) {
     defaultCommands(this)
   }
 
