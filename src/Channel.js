@@ -1,5 +1,6 @@
 import Message from './Message'
-import Map from 'es6-map'
+
+const debug = require('debug')('ircs:Channel')
 
 /**
  * Represents an IRC Channel on the server.
@@ -15,7 +16,9 @@ export default function Channel (name) {
   this.users = []
   this.topic = null
 
-  this.modes = new Map()
+  this.flagModes = []
+  this.ops = []
+  this.voices = []
 }
 
 /**
@@ -26,6 +29,10 @@ export default function Channel (name) {
 Channel.prototype.join = function (user) {
   this.users.push(user)
   user.channels.push(this)
+
+  if (this.users.length === 1) {
+    this.addOp(user)
+  }
 }
 
 /**
@@ -64,6 +71,7 @@ Channel.prototype.send = function (message) {
   if (!(message instanceof Message)) {
     message = Message.apply(null, arguments)
   }
+  debug(this.name, 'send', message.toString())
   this.users.forEach(u => { u.send(message) })
 }
 
@@ -81,11 +89,54 @@ Channel.prototype.broadcast = function (message) {
   })
 }
 
-Channel.prototype.setMode = function (user, mode) {
-  if (mode == null) this.modes.delete(user)
-  else this.modes.set(user, mode)
+Channel.prototype.addOp = function (user) {
+  if (!this.hasOp(user)) {
+    this.ops.push(user)
+  }
 }
 
-Channel.prototype.getMode = function (user) {
-  return this.modes.get(user)
+Channel.prototype.removeOp = function (user) {
+  this.ops = this.ops.filter((op) => op !== user)
+}
+
+Channel.prototype.hasOp = function (user) {
+  return this.ops.indexOf(user) !== -1
+}
+
+Channel.prototype.addVoice = function (user) {
+  if (!this.hasVoice(user)) {
+    this.voices.push(user)
+  }
+}
+
+Channel.prototype.removeVoice = function (user) {
+  this.voices = this.voices.filter((voice) => voice !== user)
+}
+
+Channel.prototype.hasVoice = function (user) {
+  return this.voices.indexOf(user) !== -1
+}
+
+Channel.prototype.addFlag = function (flag) {
+  this.flagModes.push(flag)
+}
+
+Channel.prototype.removeFlag = function (flag) {
+  this.flagModes = this.flagModes.filter((mode) => mode !== flag)
+}
+
+Channel.prototype.isPrivate = function () {
+  return this.flagModes.indexOf('p') !== -1
+}
+
+Channel.prototype.isSecret = function () {
+  return this.flagModes.indexOf('s') !== -1
+}
+
+Channel.prototype.isInviteOnly = function () {
+  return this.flagModes.indexOf('i') !== -1
+}
+
+Channel.prototype.isModerated = function () {
+  return this.flagModes.indexOf('m') !== -1
 }
