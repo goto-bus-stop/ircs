@@ -5,17 +5,18 @@ import {
   RPL_NOTOPIC
 } from '../replies'
 
-export default function ({ user, server, parameters: [ channelName ] }) {
+import names from './names'
+
+export default function (opts) {
+  const { user, server, parameters: [ channelName ] } = opts
+
   let channel = server.getChannel(channelName)
   let mask = server.mask()
   channel.join(user)
 
   channel.send(user.mask(), 'JOIN', [ channel.name, user.username, user.realname ])
 
-  // Names
-  let names = channel.users.map((u) => u.nickname)
-  user.send(mask, RPL_NAMREPLY, [ user.nickname, '=', channel.name, ...names ])
-  user.send(mask, RPL_ENDOFNAMES, [ user.nickname, channel.name, 'End of /NAMES list.' ])
+  names(opts)
 
   // Topic
   if (channel.topic) {
