@@ -8,10 +8,13 @@ export default function ({ user, server, parameters: [ channelName ] }) {
   if (channel) {
     let mask = server.mask()
     channel.users.forEach((u) => {
+      let mode = 'H'
+      if (channel.hasOp(u)) mode += '@'
+      else if (channel.hasVoice(u)) mode += '+'
       user.send(mask, RPL_WHOREPLY,
                 [ user.nickname, channel.name, u.username,
                   u.hostname, u.servername, u.nickname,
-                  'H', ':0', u.realname ])
+                  mode, ':0', u.realname ])
     })
     user.send(mask, RPL_ENDOFWHO, [ user.nickname, channelName, 'End of /WHO list.' ])
   }
