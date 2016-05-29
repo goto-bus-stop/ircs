@@ -1,5 +1,6 @@
 import nick from './commands/nick'
 import user from './commands/user'
+import list from './commands/list'
 import join from './commands/join'
 import part from './commands/part'
 import topic from './commands/topic'
@@ -15,6 +16,9 @@ export default function defaultCommands (ircs) {
   // Specifies username, hostname, servername and real name for a user.
   // Currently also sends a welcome message back to the user (should change)
   ircs.use('USER', user)
+
+  // Shows a list of known channels.
+  ircs.use('LIST', list)
 
   // Joins a channel.
   ircs.use('JOIN', join)
