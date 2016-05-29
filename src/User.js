@@ -14,7 +14,7 @@ let debug = require('debug')('ircs:User')
  *
  * @constructor
  */
-export default function User(sock) {
+export default function User (sock) {
   if (!(this instanceof User)) return new User(sock)
 
   Duplex.call(this)

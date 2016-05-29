@@ -7,9 +7,8 @@ import User from './User'
 import Channel from './Channel'
 import Message from './Message'
 import defaultCommands from './defaultCommands'
-import r from './replies'
 
-let debug = require('debug')('ircs:Server')
+const debug = require('debug')('ircs:Server')
 
 /**
  * Creates a server instance.
@@ -17,7 +16,7 @@ let debug = require('debug')('ircs:Server')
  * @see Server
  * @return {Server}
  */
-Server.createServer = function createServer(options, connectionListener) {
+Server.createServer = function createServer (options, connectionListener) {
   return Server(options, connectionListener)
 }
 
@@ -35,7 +34,7 @@ Server.defaultOptions = function () {
  *
  * @constructor
  */
-export default function Server(options, connectionListener) {
+export default function Server (options, connectionListener) {
   if (!(this instanceof Server)) return new Server(options, connectionListener)
 
   options = assign(Server.defaultOptions(), options)
@@ -133,7 +132,7 @@ Server.prototype.use = function (command, fn) {
   if (!fn) {
     [ command, fn ] = [ '', command ]
   }
-  debug('register middleware', command);
+  debug('register middleware', command)
   this._middleware.push({ command, fn })
 }
 
@@ -176,7 +175,7 @@ Server.prototype.mask = function () {
   return this.hostname
 }
 
-function normalize(str) {
+function normalize (str) {
   return str.toLowerCase().trim()
     // {, } and | are uppercase variants of [, ] and \ respectively
     .replace(/{/g, '[')

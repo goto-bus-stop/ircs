@@ -40,7 +40,7 @@
     "build": "gulp build",
     "watch": "gulp watch",
     "start": "node ./bin/ircs",
-    "lint": "standard src/**/*.js gulpfile.js",
+    "lint": "standard",
     "mocha": "mocha --compilers js:babel-register",
     "test": "npm run mocha && npm run lint"
   }

@@ -1,8 +1,8 @@
+/* eslint-env mocha */
 import assert from 'assert'
 import MessageParser from '../src/MessageParser'
 
 describe('MessageParser', () => {
-
   it('splits incoming messages into separate commands', done => {
     let i = 0
     MessageParser()
@@ -32,5 +32,4 @@ describe('MessageParser', () => {
     assert.equal(message.prefix, 'nick!user@localhost')
     assert.deepEqual(message.parameters, [ 'parameter', 'trailing' ])
   })
-
 })

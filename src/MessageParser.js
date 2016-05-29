@@ -7,7 +7,7 @@ let debug = require('debug')('ircs:MessageParser')
 /**
  * Turns a stream of plain text IRC commands into a stream of IRC Message objects.
  */
-export default function MessageParser() {
+export default function MessageParser () {
   if (!(this instanceof MessageParser)) return new MessageParser()
   Transform.call(this, { decodeStrings: false })
 
@@ -39,8 +39,8 @@ MessageParser.prototype.parse = function (line) {
   debug('parsing', line)
 
   let prefix
-    , command
-    , params
+  let command
+  let params
 
   if (line[0] === ':') {
     let prefixEnd = line.indexOf(' ')
@@ -53,8 +53,7 @@ MessageParser.prototype.parse = function (line) {
     let append = line.slice(colon + 2)
     line = line.slice(0, colon)
     params = line.split(/ +/g).concat([ append ])
-  }
-  else {
+  } else {
     params = line.split(/ +/g)
   }
 

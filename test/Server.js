@@ -1,3 +1,4 @@
+/* eslint-env mocha */
 import { Client } from 'irc'
 import ircs from '../src/Server'
 import Message from '../src/Message'
@@ -6,7 +7,6 @@ import assert from 'assert'
 const PORT = 30667
 
 describe('ircs', () => {
-
   let server
   let client
   beforeEach(done => {
@@ -19,7 +19,8 @@ describe('ircs', () => {
   })
 
   const connect = (nick = 'test', opts = { port: PORT }) => {
-    return client = new Client('localhost', nick, { port: PORT })
+    client = new Client('localhost', nick, { port: PORT })
+    return client
   }
 
   it('receives connections on a port', done => {
@@ -50,5 +51,4 @@ describe('ircs', () => {
     server.use(() => { done() })
     server.execute(Message(null, 'TEST', []))
   })
-
 })

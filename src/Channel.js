@@ -8,7 +8,7 @@ import Map from 'es6-map'
  *
  * @constructor
  */
-export default function Channel(name) {
+export default function Channel (name) {
   if (!(this instanceof Channel)) return new Channel(name)
 
   this.name = name

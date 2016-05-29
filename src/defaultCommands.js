@@ -9,10 +9,7 @@ import whois from './commands/whois'
 import privmsg from './commands/privmsg'
 import quit from './commands/quit'
 
-const debug = require('debug')('ircs:default-commands')
-
-export default function (ircs) {
-
+export default function defaultCommands (ircs) {
   ircs.use('NICK', nick)
 
   // Specifies username, hostname, servername and real name for a user.
@@ -42,5 +39,4 @@ export default function (ircs) {
 
   // Disconnects.
   ircs.use('QUIT', quit)
-
 }
