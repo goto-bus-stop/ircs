@@ -1,6 +1,4 @@
 import {
-  RPL_NAMREPLY,
-  RPL_ENDOFNAMES,
   RPL_TOPIC,
   RPL_NOTOPIC
 } from '../replies'
