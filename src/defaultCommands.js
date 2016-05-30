@@ -8,6 +8,7 @@ import names from './commands/names'
 import who from './commands/who'
 import whois from './commands/whois'
 import privmsg from './commands/privmsg'
+import notice from './commands/notice'
 import quit from './commands/quit'
 
 export default function defaultCommands (ircs) {
@@ -40,6 +41,9 @@ export default function defaultCommands (ircs) {
 
   // Sends a message to a user or channel.
   ircs.use('PRIVMSG', privmsg)
+
+  // Sends a message to a user or channel.
+  ircs.use('NOTICE', notice)
 
   // Disconnects.
   ircs.use('QUIT', quit)
