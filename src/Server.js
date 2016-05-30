@@ -7,6 +7,7 @@ import User from './User'
 import Channel from './Channel'
 import Message from './Message'
 import defaultCommands from './defaultCommands'
+import isValidChannelName from './util/isValidChannelName'
 
 const debug = require('debug')('ircs:Server')
 
@@ -102,6 +103,9 @@ Server.prototype.findChannel = function (channelName) {
  */
 Server.prototype.createChannel = function (channelName) {
   channelName = normalize(channelName)
+  if (!isValidChannelName(channelName)) {
+    throw new Error('Invalid channel name')
+  }
   return channelName in this.channels ? this.channels[channelName]
                                       : (this.channels[channelName] = Channel(channelName))
 }
@@ -114,6 +118,9 @@ Server.prototype.createChannel = function (channelName) {
  * @return {Channel} The Channel.
  */
 Server.prototype.getChannel = function (channelName) {
+  if (!isValidChannelName(channelName)) {
+    return
+  }
   return this.findChannel(channelName) || this.createChannel(channelName)
 }
 
