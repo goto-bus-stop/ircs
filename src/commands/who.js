@@ -3,7 +3,7 @@ import {
   RPL_ENDOFWHO
 } from '../replies'
 
-export default function ({ user, server, parameters: [ channelName ] }) {
+export default function who ({ user, server, parameters: [ channelName ] }) {
   let channel = server.findChannel(channelName)
   if (channel) {
     let mask = server.mask()

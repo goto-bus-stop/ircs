@@ -1,4 +1,4 @@
-export default function notice({ user, server, parameters: [ targetName, content ] }) {
+export default function notice ({ user, server, parameters: [ targetName, content ] }) {
   let target
   if (targetName[0] === '#' || targetName[0] === '&') {
     target = server.findChannel(targetName)

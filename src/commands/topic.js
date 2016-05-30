@@ -5,7 +5,7 @@ import {
   ERR_CHANOPRIVSNEEDED
 } from '../replies'
 
-export default function ({ user, server, parameters: [ channelName, topic ] }) {
+export default function topic ({ user, server, parameters: [ channelName, topic ] }) {
   let channel = server.findChannel(channelName)
   if (channel) {
     let mask = server.mask()

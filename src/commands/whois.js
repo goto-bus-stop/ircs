@@ -5,7 +5,7 @@ import {
   ERR_NOSUCHNICK
 } from '../replies'
 
-export default function ({ user, server, parameters: [ nickmask ] }) {
+export default function whois ({ user, server, parameters: [ nickmask ] }) {
   let target = server.findUser(nickmask)
   let mask = server.mask()
   if (target) {

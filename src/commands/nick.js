@@ -5,7 +5,7 @@ import {
 
 const debug = require('debug')('ircs:commands:nick')
 
-export default function ({ user, server, parameters: [ nickname ] }) {
+export default function nick ({ user, server, parameters: [ nickname ] }) {
   let mask = user.mask()
   nickname = nickname.trim()
 

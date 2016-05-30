@@ -3,7 +3,7 @@ import {
   RPL_ENDOFNAMES
 } from '../replies'
 
-export default function ({ user, server, parameters: [ channelName ] }) {
+export default function names ({ user, server, parameters: [ channelName ] }) {
   let channel = server.findChannel(channelName)
   if (channel) {
     let names = channel.users.map((u) => {

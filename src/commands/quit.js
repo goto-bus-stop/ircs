@@ -1,4 +1,4 @@
-export default function ({ user, server, parameters: [ message ] }) {
+export default function quit ({ user, server, parameters: [ message ] }) {
   message = message || user.nickname
 
   server.users.splice(server.users.indexOf(user), 1)

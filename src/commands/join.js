@@ -5,7 +5,7 @@ import {
 
 import names from './names'
 
-export default function (opts) {
+export default function join (opts) {
   const { user, server, parameters: [ channelName ] } = opts
 
   let channel = server.getChannel(channelName)

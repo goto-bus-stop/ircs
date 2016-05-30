@@ -3,7 +3,7 @@ import {
   ERR_NOTONCHANNEL
 } from '../replies'
 
-export default function ({ user, server, parameters: [ channelName, message ] }) {
+export default function part ({ user, server, parameters: [ channelName, message ] }) {
   let channel = server.findChannel(channelName)
 
   if (!channel) {

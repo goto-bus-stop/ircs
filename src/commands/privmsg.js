@@ -2,7 +2,7 @@ import {
   ERR_NOSUCHNICK
 } from '../replies'
 
-export default function ({ user, server, parameters: [ targetName, content ] }) {
+export default function privmsg ({ user, server, parameters: [ targetName, content ] }) {
   let target
   if (targetName[0] === '#' || targetName[0] === '&') {
     target = server.findChannel(targetName)
