@@ -9,6 +9,6 @@ IRC Server library in Node.js
 var ircs = require('ircs')
 
 ircs().listen(6667, () => {
-  console.log('Ready, sire!')
+  console.log('Ready!')
 })
 ```
