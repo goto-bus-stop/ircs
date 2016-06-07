@@ -1,7 +1,7 @@
 {
   "name": "ircs",
   "description": "IRC Server library in Node.js",
-  "version": "0.2.5",
+  "version": "0.3.0",
   "license": "MIT",
   "keywords": [
     "irc",
