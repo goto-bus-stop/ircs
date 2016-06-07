@@ -1,11 +1,16 @@
 import {
   ERR_NOSUCHCHANNEL,
-  ERR_NOTONCHANNEL
+  ERR_NOTONCHANNEL,
+  ERR_NEEDMOREPARAMS
 } from '../replies'
 
 export default function part ({ user, server, parameters: [ channelName, message ] }) {
-  let channel = server.findChannel(channelName)
+  if (!channelName) {
+    user.send(server.mask(), ERR_NEEDMOREPARAMS, [ 'PART', 'Not enough parameters' ])
+    return
+  }
 
+  const channel = server.findChannel(channelName)
   if (!channel) {
     user.send(user.mask(), ERR_NOSUCHCHANNEL, [ channelName, 'No such channel.' ])
     return
