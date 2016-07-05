@@ -1,7 +1,6 @@
 import {
   ERR_CHANOPRIVSNEEDED,
   ERR_NOSUCHCHANNEL,
-  ERR_NOSUCHNICK,
   RPL_CHANNELMODEIS
 } from '../replies'
 
