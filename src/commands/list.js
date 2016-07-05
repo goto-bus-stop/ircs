@@ -13,9 +13,13 @@ export default function list ({ user, server, parameters: [ channels ] }) {
 
   channels
     .map(server.findChannel, server)
+    .filter((chan) => !chan.isSecret() || chan.hasUser(user))
     .forEach((chan) => {
-      user.send(mask, RPL_LIST,
-                [ user.nickname, chan.name, chan.users.length, chan.topic || '' ])
+      let response = [ user.nickname, chan.name, chan.users.length, chan.topic || '' ]
+      if (chan.isPrivate() && !chan.hasUser(user)) {
+        response = [ user.nickname, 'Prv', chan.users.length, '' ]
+      }
+      user.send(mask, RPL_LIST, response)
     })
 
   user.send(mask, RPL_LISTEND, [ user.nickname, 'End of /LIST' ])
