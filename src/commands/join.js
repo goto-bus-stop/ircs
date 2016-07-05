@@ -21,7 +21,9 @@ export default function join (opts) {
 
     channel.send(user.mask(), 'JOIN', [ channel.name, user.username, user.realname ])
 
-    names(opts)
+    names(Object.assign({}, opts, {
+      parameters: [ channelName ]
+    }))
 
     // Topic
     if (channel.topic) {
