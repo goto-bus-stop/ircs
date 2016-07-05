@@ -3,6 +3,7 @@ import user from './commands/user'
 import list from './commands/list'
 import join from './commands/join'
 import part from './commands/part'
+import mode from './commands/mode'
 import topic from './commands/topic'
 import names from './commands/names'
 import who from './commands/who'
@@ -26,6 +27,9 @@ export default function defaultCommands (ircs) {
 
   // Parts a channel.
   ircs.use('PART', part)
+
+  // Sets channel modes.
+  ircs.use('MODE', mode)
 
   // Sets channel topics.
   ircs.use('TOPIC', topic)
