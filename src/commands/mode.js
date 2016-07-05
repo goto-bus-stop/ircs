@@ -16,8 +16,8 @@ export default function mode ({ user, server, parameters: [ target, modes = '', 
   if (!modes) {
     // bare /MODE: return current modes
     const modeString = channel.modes.toString()
-    channel.send(user.mask(), RPL_CHANNELMODEIS,
-                 [ user.nickname, target, ...modeString.split(' ') ])
+    user.send(server.mask(), RPL_CHANNELMODEIS,
+              [ user.nickname, target, ...modeString.split(' ') ])
     return
   }
 
