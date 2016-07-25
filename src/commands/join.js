@@ -1,3 +1,4 @@
+import assign from 'object-assign'
 import {
   RPL_TOPIC,
   RPL_NOTOPIC,
@@ -21,7 +22,7 @@ export default function join (opts) {
 
     channel.send(user.mask(), 'JOIN', [ channel.name, user.username, user.realname ])
 
-    names(Object.assign({}, opts, {
+    names(assign({}, opts, {
       parameters: [ channelName ]
     }))
 

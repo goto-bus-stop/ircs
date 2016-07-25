@@ -1,3 +1,5 @@
+import assign from 'object-assign'
+
 const flagModeChars = [ 'p', 's', 'i', 't', 'n', 'm' ]
 const paramModeChars = [ 'l', 'k' ]
 const listModeChars = [ 'o', 'v' ]
@@ -12,7 +14,7 @@ export default function Modes (channel) {
   this.listModes = {}
 }
 
-Object.assign(Modes.prototype, {
+assign(Modes.prototype, {
   add (mode, params = []) {
     if (isFlagMode(mode)) {
       this.flagModes[mode] = true
