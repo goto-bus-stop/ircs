@@ -8,7 +8,7 @@ export default function mode ({ user, server, parameters: [ target, modes = '', 
   const channel = server.findChannel(target)
   if (!channel) {
     user.send(server, ERR_NOSUCHCHANNEL,
-              [ user.nickname, target, 'No such channel' ])
+              [ user.nickname, target, ':No such channel' ])
     return
   }
 
@@ -25,7 +25,7 @@ export default function mode ({ user, server, parameters: [ target, modes = '', 
 
   if (!channel.hasOp(user)) {
     user.send(server, ERR_CHANOPRIVSNEEDED,
-              [ user.nickname, channel.name, 'You\'re not channel operator' ])
+              [ user.nickname, channel.name, ':You\'re not channel operator' ])
     return
   }
 

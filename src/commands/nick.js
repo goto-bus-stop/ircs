@@ -24,7 +24,7 @@ export default function nick ({ user, server, parameters: [ nickname ] }) {
                                 us.nickname.toLowerCase() === lnick &&
                                 us !== user)) {
     return user.send(server, ERR_NICKNAMEINUSE,
-                     [ user.nickname, nickname, 'Nickname is already in use' ])
+                     [ user.nickname, nickname, ':Nickname is already in use' ])
   }
 
   user.send(user, 'NICK', [ nickname ])

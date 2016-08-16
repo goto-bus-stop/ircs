@@ -7,7 +7,7 @@ import {
 export default function list ({ user, server, parameters: [ channels ] }) {
   channels = channels ? channels.split(',') : Object.keys(server.channels)
 
-  user.send(server, RPL_LISTSTART, [ user.nickname, 'Channel', 'Users  Name' ])
+  user.send(server, RPL_LISTSTART, [ user.nickname, 'Channel', ':Users  Name' ])
 
   channels
     .map(server.findChannel, server)
@@ -20,5 +20,5 @@ export default function list ({ user, server, parameters: [ channels ] }) {
       user.send(server, RPL_LIST, response)
     })
 
-  user.send(server, RPL_LISTEND, [ user.nickname, 'End of /LIST' ])
+  user.send(server, RPL_LISTEND, [ user.nickname, ':End of /LIST' ])
 }

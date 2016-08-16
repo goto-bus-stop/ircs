@@ -15,6 +15,6 @@ export default function who ({ user, server, parameters: [ channelName ] }) {
                   u.hostname, u.servername, u.nickname,
                   mode, ':0', u.realname ])
     })
-    user.send(server, RPL_ENDOFWHO, [ user.nickname, channelName, 'End of /WHO list.' ])
+    user.send(server, RPL_ENDOFWHO, [ user.nickname, channelName, ':End of /WHO list.' ])
   }
 }
