@@ -1,7 +1,7 @@
 /**
  * Represents an IRC message.
  *
- * @param {string|null} prefix Message prefix. (Optional.)
+ * @param {string|Object|null} prefix Message prefix. (Optional.)
  * @param {string} command Command name.
  * @param {Array.<string>} parameters IRC Command parameters.
  *
@@ -9,6 +9,11 @@
  */
 export default function Message (prefix, command, parameters) {
   if (!(this instanceof Message)) return new Message(prefix, command, parameters)
+
+  if (prefix && typeof prefix.mask === 'function') {
+    prefix = prefix.mask()
+  }
+
   /**
    * Message Prefix. Basically just the sender nickmask.
    * @member {string}

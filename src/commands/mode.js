@@ -7,7 +7,7 @@ import {
 export default function mode ({ user, server, parameters: [ target, modes = '', ...params ] }) {
   const channel = server.findChannel(target)
   if (!channel) {
-    user.send(server.mask(), ERR_NOSUCHCHANNEL,
+    user.send(server, ERR_NOSUCHCHANNEL,
               [ user.nickname, target, 'No such channel' ])
     return
   }
@@ -15,7 +15,7 @@ export default function mode ({ user, server, parameters: [ target, modes = '', 
   if (!modes) {
     // bare /MODE: return current modes
     const modeString = channel.modes.toString()
-    user.send(server.mask(), RPL_CHANNELMODEIS,
+    user.send(server, RPL_CHANNELMODEIS,
               [ user.nickname, target, ...modeString.split(' ') ])
     return
   }
@@ -24,7 +24,7 @@ export default function mode ({ user, server, parameters: [ target, modes = '', 
   const modeChars = modes.slice(1).split('')
 
   if (!channel.hasOp(user)) {
-    user.send(server.mask(), ERR_CHANOPRIVSNEEDED,
+    user.send(server, ERR_CHANOPRIVSNEEDED,
               [ user.nickname, channel.name, 'You\'re not channel operator' ])
     return
   }
@@ -37,5 +37,5 @@ export default function mode ({ user, server, parameters: [ target, modes = '', 
     }
   })
 
-  channel.send(user.mask(), 'MODE', [ target, modes, ...params ])
+  channel.send(user, 'MODE', [ target, modes, ...params ])
 }

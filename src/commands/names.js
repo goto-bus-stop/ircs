@@ -17,7 +17,7 @@ export default function names ({ user, server, parameters: [ channelName ] }) {
                  : channel.hasVoice(user) ? '+'
                  : '='
 
-    user.send(server.mask(), RPL_NAMREPLY, [ user.nickname, myMode, channel.name, ...names ])
-    user.send(server.mask(), RPL_ENDOFNAMES, [ user.nickname, channel.name, 'End of /NAMES list.' ])
+    user.send(server, RPL_NAMREPLY, [ user.nickname, myMode, channel.name, ...names ])
+    user.send(server, RPL_ENDOFNAMES, [ user.nickname, channel.name, 'End of /NAMES list.' ])
   }
 }

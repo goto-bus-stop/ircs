@@ -4,7 +4,7 @@ export default function quit ({ user, server, parameters: [ message ] }) {
   server.users.splice(server.users.indexOf(user), 1)
   user.channels.forEach((chan) => {
     chan.part(user)
-    chan.send(user.mask(), 'PART', [ chan.name, message ])
+    chan.send(user, 'PART', [ chan.name, message ])
   })
   user.sock.end()
 }

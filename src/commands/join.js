@@ -9,10 +9,9 @@ import names from './names'
 
 export default function join (opts) {
   const { user, server, parameters: [ channelNames ] } = opts
-  const mask = server.mask()
 
   if (!channelNames) {
-    user.send(mask, ERR_NEEDMOREPARAMS, [ 'JOIN', 'Not enough parameters' ])
+    user.send(server, ERR_NEEDMOREPARAMS, [ 'JOIN', 'Not enough parameters' ])
     return
   }
 
@@ -20,7 +19,7 @@ export default function join (opts) {
     const channel = server.getChannel(channelName)
     channel.join(user)
 
-    channel.send(user.mask(), 'JOIN', [ channel.name, user.username, user.realname ])
+    channel.send(user, 'JOIN', [ channel.name, user.username, user.realname ])
 
     names(assign({}, opts, {
       parameters: [ channelName ]
@@ -28,9 +27,9 @@ export default function join (opts) {
 
     // Topic
     if (channel.topic) {
-      user.send(mask, RPL_TOPIC, [ user.nickname, channel.name, channel.topic ])
+      user.send(server, RPL_TOPIC, [ user.nickname, channel.name, channel.topic ])
     } else {
-      user.send(mask, RPL_NOTOPIC, [ user.nickname, channel.name, 'No topic is set.' ])
+      user.send(server, RPL_NOTOPIC, [ user.nickname, channel.name, 'No topic is set.' ])
     }
   }
 }

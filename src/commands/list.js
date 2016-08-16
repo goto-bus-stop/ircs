@@ -5,11 +5,9 @@ import {
 } from '../replies'
 
 export default function list ({ user, server, parameters: [ channels ] }) {
-  const mask = server.mask()
-
   channels = channels ? channels.split(',') : Object.keys(server.channels)
 
-  user.send(mask, RPL_LISTSTART, [ user.nickname, 'Channel', 'Users  Name' ])
+  user.send(server, RPL_LISTSTART, [ user.nickname, 'Channel', 'Users  Name' ])
 
   channels
     .map(server.findChannel, server)
@@ -19,8 +17,8 @@ export default function list ({ user, server, parameters: [ channels ] }) {
       if (chan.isPrivate() && !chan.hasUser(user)) {
         response = [ user.nickname, 'Prv', chan.users.length, '' ]
       }
-      user.send(mask, RPL_LIST, response)
+      user.send(server, RPL_LIST, response)
     })
 
-  user.send(mask, RPL_LISTEND, [ user.nickname, 'End of /LIST' ])
+  user.send(server, RPL_LISTEND, [ user.nickname, 'End of /LIST' ])
 }
