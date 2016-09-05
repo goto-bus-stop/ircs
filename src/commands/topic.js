@@ -22,7 +22,7 @@ export default function topic ({ user, server, parameters: [ channelName, topic 
       user.send(server, ERR_NOTONCHANNEL, [ user.nickname, channel.name, ':You\'re not on that channel.' ])
       return
     }
-    if (false/** @todo (user is not op) */) {
+    if (!channel.hasOp(user)) {
       user.send(server, ERR_CHANOPRIVSNEEDED, [ user.nickname, channel.name, ':You\'re not channel operator' ])
       return
     }
