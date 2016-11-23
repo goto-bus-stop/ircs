@@ -31,7 +31,7 @@
     "gulp-watch": "^4.3.9",
     "irc": "0.5.0",
     "mocha": "^3.0.0",
-    "standard": "^8.0.0",
+    "standard": "^8.6.0",
     "through2": "^2.0.1"
   },
   "scripts": {
