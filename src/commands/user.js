@@ -10,8 +10,7 @@ export default function user ({ user, server, parameters: [ username, hostname, 
 
   user.send(server, '001', [ user.nickname, ':Welcome' ])
   user.send(server, '002',
-            [ user.nickname,
-              `:Your host is ${server.hostname} running version ${pkg.version}` ])
+    [ user.nickname, `:Your host is ${server.hostname} running version ${pkg.version}` ])
   user.send(server, '003', [ user.nickname, `:This server was created ${server.created}` ])
   user.send(server, '004', [ user.nickname, pkg.name, pkg.version ])
   user.send(server, 'MODE', [ user.nickname, '+w' ])
