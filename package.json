@@ -29,7 +29,7 @@
     "gulp-plumber": "^1.1.0",
     "gulp-util": "^3.0.7",
     "gulp-watch": "^4.3.9",
-    "irc": "0.5.1",
+    "irc": "0.5.2",
     "mocha": "^3.0.0",
     "standard": "^8.6.0",
     "through2": "^2.0.1"
