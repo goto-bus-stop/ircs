@@ -2,7 +2,7 @@
 
 import MessageParser from './MessageParser'
 import Message from './Message'
-import { Duplex } from 'stream'
+import { Duplex } from 'readable-stream'
 
 let debug = require('debug')('ircs:User')
 

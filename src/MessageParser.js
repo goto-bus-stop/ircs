@@ -1,5 +1,5 @@
 import Message from './Message'
-import { Transform } from 'stream'
+import { Transform } from 'readable-stream'
 
 let debug = require('debug')('ircs:MessageParser')
 
