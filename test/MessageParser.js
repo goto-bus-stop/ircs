@@ -5,7 +5,7 @@ import MessageParser from '../src/MessageParser'
 describe('MessageParser', () => {
   it('splits incoming messages into separate commands', done => {
     let i = 0
-    MessageParser()
+    new MessageParser()
       .on('data', d => { i++ })
       .on('finish', () => {
         assert.equal(i, 3)

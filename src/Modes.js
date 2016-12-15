@@ -1,5 +1,3 @@
-import assign from 'object-assign'
-
 const flagModeChars = [ 'p', 's', 'i', 't', 'n', 'm' ]
 const paramModeChars = [ 'l', 'k' ]
 const listModeChars = [ 'o', 'v' ]
@@ -8,13 +6,13 @@ export const isFlagMode = (mode) => flagModeChars.indexOf(mode) !== -1
 export const isParamMode = (mode) => paramModeChars.indexOf(mode) !== -1
 export const isListMode = (mode) => listModeChars.indexOf(mode) !== -1
 
-export default function Modes (channel) {
-  this.flagModes = {}
-  this.paramModes = {}
-  this.listModes = {}
-}
+export default class Modes {
+  constructor (channel) {
+    this.flagModes = {}
+    this.paramModes = {}
+    this.listModes = {}
+  }
 
-assign(Modes.prototype, {
   add (mode, params = []) {
     if (isFlagMode(mode)) {
       this.flagModes[mode] = true
@@ -23,7 +21,7 @@ assign(Modes.prototype, {
     } else if (isListMode(mode)) {
       this.listModes[mode] = (this.listModes[mode] || []).concat(params)
     }
-  },
+  }
 
   remove (mode, params = []) {
     if (isFlagMode(mode)) {
@@ -34,7 +32,7 @@ assign(Modes.prototype, {
       const shouldKeep = (param) => params.every((remove) => param !== remove)
       this.listModes[mode] = (this.listModes[mode] || []).filter(shouldKeep)
     }
-  },
+  }
 
   get (mode) {
     if (isFlagMode(mode)) {
@@ -44,7 +42,7 @@ assign(Modes.prototype, {
     } else if (isListMode(mode)) {
       return this.listModes[mode]
     }
-  },
+  }
 
   has (mode, param) {
     if (isFlagMode(mode)) {
@@ -56,11 +54,11 @@ assign(Modes.prototype, {
       return list && list.indexOf(param) !== -1
     }
     return false
-  },
+  }
 
   flags () {
     return Object.keys(this.flagModes)
-  },
+  }
 
   toString () {
     let str = '+' + this.flags().join('')
@@ -76,4 +74,4 @@ assign(Modes.prototype, {
     }
     return str
   }
-})
+}

@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 import { Client } from 'irc'
-import ircs from '../src/Server'
+import ircs from '../src'
 import Message from '../src/Message'
 import assert from 'assert'
 
@@ -39,7 +39,7 @@ describe('ircs', () => {
       assert.ok(called, 'Middleware without a command should always be called')
       done()
     })
-    server.execute(Message(null, 'TEST', []))
+    server.execute(new Message(null, 'TEST', []))
   })
 
   it('executes middleware in order', done => {
@@ -49,6 +49,6 @@ describe('ircs', () => {
     server.use(() => { assert.strictEqual(stage++, 2) })
     server.use(() => { assert.strictEqual(stage++, 3) })
     server.use(() => { done() })
-    server.execute(Message(null, 'TEST', []))
+    server.execute(new Message(null, 'TEST', []))
   })
 })
