@@ -1,5 +1,3 @@
-'use strict'
-
 import MessageParser from './MessageParser'
 import Message from './Message'
 import { Duplex } from 'readable-stream'
