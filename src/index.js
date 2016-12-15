@@ -1,9 +1,8 @@
 import Server from './Server'
 
-export {
-  Server
-}
+module.exports = ircs
+ircs.Server = Server
 
-export default function ircs (opts, listener) {
+function ircs (opts, listener) {
   return new Server(opts, listener)
 }

@@ -2,6 +2,7 @@ import net from 'net'
 import find from 'array-find'
 import assign from 'object-assign'
 import each from 'each-async'
+import Map from 'es6-map'
 import User from './User'
 import Channel from './Channel'
 import Message from './Message'
@@ -44,7 +45,7 @@ export default class Server extends net.Server {
     this.created = new Date()
     this._middleware = []
     this.users = []
-    this.channels = {}
+    this.channels = new Map()
     this.hostname = options.hostname || 'localhost'
 
     this.on('connection', sock => {
@@ -88,7 +89,7 @@ export default class Server extends net.Server {
    * @return {Channel|undefined} Relevant Channel object if found, `undefined` if not found.
    */
   findChannel (channelName) {
-    return this.channels[normalize(channelName)]
+    return this.channels.get(normalize(channelName))
   }
 
   /**
@@ -104,8 +105,11 @@ export default class Server extends net.Server {
       throw new Error('Invalid channel name')
     }
 
-    return channelName in this.channels ? this.channels[channelName]
-                                        : (this.channels[channelName] = new Channel(channelName))
+    if (!this.channels.has(channelName)) {
+      this.channels.set(channelName, new Channel(channelName))
+    }
+
+    return this.channels.get(channelName)
   }
 
   /**
@@ -130,7 +134,7 @@ export default class Server extends net.Server {
    * @return {boolean} True if the channel exists, false if not.
    */
   hasChannel (channelName) {
-    return normalize(channelName) in this.channels
+    return this.channels.has(normalize(channelName))
   }
 
   use (command, fn) {

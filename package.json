@@ -10,7 +10,7 @@
   "repository": "goto-bus-stop/ircs",
   "bugs": "https://github.com/goto-bus-stop/ircs/issues",
   "author": "goto-bus-stop <rene@kooi.me>",
-  "main": "lib/Server",
+  "main": "lib/index.js",
   "bin": "bin/ircs",
   "dependencies": {
     "array-find": "^1.0.0",
