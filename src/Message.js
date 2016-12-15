@@ -37,16 +37,7 @@ export default function Message (prefix, command, parameters) {
  * @return {string} IRC command.
  */
 Message.prototype.toString = function () {
-  let parameters = this.parameters.slice(0)
-  // prefix last parameter by : so it becomes trailing data
-  if (parameters.length) {
-    let last = parameters[parameters.length - 1]
-    if (last && last.indexOf(' ') !== -1) {
-      parameters[parameters.length - 1] = `:${parameters[parameters.length - 1]}`
-    }
-  }
-
   return (this.prefix ? `:${this.prefix} ` : '') +
          this.command +
-         (parameters.length ? ` ${parameters.join(' ')}` : '')
+         (this.parameters.length ? ` ${this.parameters.join(' ')}` : '')
 }
