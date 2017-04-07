@@ -1,5 +1,6 @@
+import createDebug from 'debug'
 import pkg from '../../package.json'
-const debug = require('debug')('ircs:commands:user')
+const debug = createDebug('ircs:commands:user')
 
 export default function user ({ user, server, parameters: [ username, hostname, servername, realname ] }) {
   debug('USER', user.mask(), username, hostname, servername, realname)

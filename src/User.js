@@ -1,8 +1,9 @@
+import createDebug from 'debug'
 import MessageParser from './MessageParser'
 import Message from './Message'
 import { Duplex } from 'readable-stream'
 
-let debug = require('debug')('ircs:User')
+const debug = createDebug('ircs:User')
 
 /**
  * Represents a User on the server.

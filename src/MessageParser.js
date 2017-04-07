@@ -1,7 +1,8 @@
+import createDebug from 'debug'
 import Message from './Message'
 import { Transform } from 'readable-stream'
 
-let debug = require('debug')('ircs:MessageParser')
+const debug = createDebug('ircs:MessageParser')
 
 export default class MessageParser extends Transform {
   constructor () {

@@ -1,4 +1,5 @@
 import net from 'net'
+import createDebug from 'debug'
 import find from 'array-find'
 import assign from 'object-assign'
 import each from 'each-async'
@@ -9,7 +10,7 @@ import Message from './Message'
 import defaultCommands from './defaultCommands'
 import isValidChannelName from './util/isValidChannelName'
 
-const debug = require('debug')('ircs:Server')
+const debug = createDebug('ircs:Server')
 
 /**
  * Represents a single IRC server.

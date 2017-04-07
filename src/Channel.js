@@ -1,7 +1,8 @@
+import createDebug from 'debug'
 import Message from './Message'
 import Modes from './Modes'
 
-const debug = require('debug')('ircs:Channel')
+const debug = createDebug('ircs:Channel')
 
 /**
  * Represents an IRC Channel on the server.
