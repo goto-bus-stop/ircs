@@ -1,9 +1,7 @@
 import net from 'net'
 import createDebug from 'debug'
 import find from 'array-find'
-import assign from 'object-assign'
 import each from 'each-async'
-import Map from 'es6-map'
 import User from './User'
 import Channel from './Channel'
 import Message from './Message'
@@ -39,7 +37,7 @@ export default class Server extends net.Server {
    * @param {function()} connectionListener `net.Server` connection listener.
    */
   constructor (options, connectionListener) {
-    options = assign(Server.defaultOptions(), options)
+    options = Object.assign(Server.defaultOptions(), options)
 
     super(options, connectionListener)
 
