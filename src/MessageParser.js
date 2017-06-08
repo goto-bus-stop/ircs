@@ -1,15 +1,7 @@
-<<<<<<< Updated upstream
-import createDebug from 'debug'
-import Message from './Message'
-import { Transform } from 'readable-stream'
-
-const debug = createDebug('ircs:MessageParser')
-=======
 const Message = require('./Message')
 const { Transform } = require('readable-stream')
 
 const debug = require('debug')('ircs:MessageParser')
->>>>>>> Stashed changes
 
 module.exports = class MessageParser extends Transform {
   constructor () {
