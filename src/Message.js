@@ -1,7 +1,7 @@
 /**
  * Represents an IRC message.
  */
-export default class Message {
+module.exports = class Message {
   /**
    * @param {string|Object|null} prefix Message prefix. (Optional.)
    * @param {string} command Command name.

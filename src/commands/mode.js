@@ -1,10 +1,10 @@
-import {
+const {
   ERR_CHANOPRIVSNEEDED,
   ERR_NOSUCHCHANNEL,
   RPL_CHANNELMODEIS
-} from '../replies'
+} = require('../replies')
 
-export default function mode ({ user, server, parameters: [ target, modes = '', ...params ] }) {
+module.exports = function mode ({ user, server, parameters: [ target, modes = '', ...params ] }) {
   const channel = server.findChannel(target)
   if (!channel) {
     user.send(server, ERR_NOSUCHCHANNEL,

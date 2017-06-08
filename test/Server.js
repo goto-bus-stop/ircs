@@ -1,8 +1,8 @@
 /* eslint-env mocha */
-import { Client } from 'irc'
-import ircs from '../src'
-import Message from '../src/Message'
-import assert from 'assert'
+const { Client } = require('irc')
+const ircs = require('../src')
+const Message = require('../src/Message')
+const assert = require('assert')
 
 const PORT = 30667
 

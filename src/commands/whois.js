@@ -1,11 +1,11 @@
-import {
+const {
   RPL_WHOISUSER,
   RPL_WHOISSERVER,
   RPL_ENDOFWHOIS,
   ERR_NOSUCHNICK
-} from '../replies'
+} = require('../replies')
 
-export default function whois ({ user, server, parameters: [ nickmask ] }) {
+module.exports = function whois ({ user, server, parameters: [ nickmask ] }) {
   let target = server.findUser(nickmask)
   if (target) {
     user.send(server, RPL_WHOISUSER, [ user.nickname, target.username, target.hostname, '*', `:${user.realname}` ])

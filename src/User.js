@@ -1,14 +1,13 @@
-import createDebug from 'debug'
-import MessageParser from './MessageParser'
-import Message from './Message'
-import { Duplex } from 'readable-stream'
+const MessageParser = require('./MessageParser')
+const Message = require('./Message')
+const { Duplex } = require('readable-stream')
 
-const debug = createDebug('ircs:User')
+const debug = require('debug')('ircs:User')
 
 /**
  * Represents a User on the server.
  */
-export default class User extends Duplex {
+module.exports = class User extends Duplex {
   /**
    * @param {stream.Duplex} sock Duplex Stream to read & write commands from & to.
    */

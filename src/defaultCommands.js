@@ -1,18 +1,18 @@
-import nick from './commands/nick'
-import user from './commands/user'
-import list from './commands/list'
-import join from './commands/join'
-import part from './commands/part'
-import mode from './commands/mode'
-import topic from './commands/topic'
-import names from './commands/names'
-import who from './commands/who'
-import whois from './commands/whois'
-import privmsg from './commands/privmsg'
-import notice from './commands/notice'
-import quit from './commands/quit'
+const nick = require('./commands/nick')
+const user = require('./commands/user')
+const list = require('./commands/list')
+const join = require('./commands/join')
+const part = require('./commands/part')
+const mode = require('./commands/mode')
+const topic = require('./commands/topic')
+const names = require('./commands/names')
+const who = require('./commands/who')
+const whois = require('./commands/whois')
+const privmsg = require('./commands/privmsg')
+const notice = require('./commands/notice')
+const quit = require('./commands/quit')
 
-export default function defaultCommands (ircs) {
+module.exports = function defaultCommands (ircs) {
   ircs.use('NICK', nick)
 
   // Specifies username, hostname, servername and real name for a user.

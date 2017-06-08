@@ -1,11 +1,11 @@
-import {
+const {
   RPL_TOPIC,
   RPL_NOTOPIC,
   ERR_NOTONCHANNEL,
   ERR_CHANOPRIVSNEEDED
-} from '../replies'
+} = require('../replies')
 
-export default function topic ({ user, server, parameters: [ channelName, topic ] }) {
+module.exports = function topic ({ user, server, parameters: [ channelName, topic ] }) {
   let channel = server.findChannel(channelName)
   if (channel) {
     // no new topic given, → check

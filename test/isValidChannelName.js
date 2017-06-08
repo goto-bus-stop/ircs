@@ -1,6 +1,6 @@
 /* eslint-env mocha */
-import assert from 'assert'
-import isValidChannelName from '../src/util/isValidChannelName'
+const assert = require('assert')
+const isValidChannelName = require('../src/util/isValidChannelName')
 
 it('isValidChannelName', () => {
   assert(isValidChannelName('#channel'))

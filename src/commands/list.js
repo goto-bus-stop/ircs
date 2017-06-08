@@ -1,10 +1,10 @@
-import {
+const {
   RPL_LISTSTART,
   RPL_LIST,
   RPL_LISTEND
-} from '../replies'
+} = require('../replies')
 
-export default function list ({ user, server, parameters: [ channels ] }) {
+module.exports = function list ({ user, server, parameters: [ channels ] }) {
   channels = channels ? channels.split(',') : null
 
   user.send(server, RPL_LISTSTART, [ user.nickname, 'Channel', ':Users  Name' ])

@@ -1,12 +1,11 @@
-import createDebug from 'debug'
-import {
+const {
   ERR_NONICKNAMEGIVEN,
   ERR_NICKNAMEINUSE
-} from '../replies'
+} = require('../replies')
 
-const debug = createDebug('ircs:commands:nick')
+const debug = require('debug')('ircs:commands:nick')
 
-export default function nick ({ user, server, parameters: [ nickname ] }) {
+module.exports = function nick ({ user, server, parameters: [ nickname ] }) {
   nickname = nickname.trim()
 
   debug('NICK', user.mask(), nickname)

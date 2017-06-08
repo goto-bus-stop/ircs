@@ -1,8 +1,8 @@
-import {
+const {
   ERR_NOSUCHNICK
-} from '../replies'
+} = require('../replies')
 
-export default function privmsg ({ user, server, parameters: [ targetName, content ] }) {
+module.exports = function privmsg ({ user, server, parameters: [ targetName, content ] }) {
   let target
   if (targetName[0] === '#' || targetName[0] === '&') {
     target = server.findChannel(targetName)

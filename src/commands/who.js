@@ -1,9 +1,9 @@
-import {
+const {
   RPL_WHOREPLY,
   RPL_ENDOFWHO
-} from '../replies'
+} = require('../replies')
 
-export default function who ({ user, server, parameters: [ channelName ] }) {
+module.exports = function who ({ user, server, parameters: [ channelName ] }) {
   let channel = server.findChannel(channelName)
   if (channel) {
     channel.users.forEach((u) => {

@@ -1,6 +1,6 @@
 /* eslint-env mocha */
-import assert from 'assert'
-import MessageParser from '../src/MessageParser'
+const assert = require('assert')
+const MessageParser = require('../src/MessageParser')
 
 describe('MessageParser', () => {
   it('splits incoming messages into separate commands', done => {

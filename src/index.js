@@ -1,4 +1,4 @@
-import Server from './Server'
+const Server = require('./Server')
 
 module.exports = ircs
 ircs.Server = Server

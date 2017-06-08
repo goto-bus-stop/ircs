@@ -1,12 +1,12 @@
-import {
+const {
   RPL_TOPIC,
   RPL_NOTOPIC,
   ERR_NEEDMOREPARAMS
-} from '../replies'
+} = require('../replies')
 
-import names from './names'
+const names = require('./names')
 
-export default function join (opts) {
+module.exports = function join (opts) {
   const { user, server, parameters: [ channelNames ] } = opts
 
   if (!channelNames) {

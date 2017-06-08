@@ -1,9 +1,9 @@
-import {
+const {
   RPL_NAMREPLY,
   RPL_ENDOFNAMES
-} from '../replies'
+} = require('../replies')
 
-export default function names ({ user, server, parameters: [ channelName ] }) {
+module.exports = function names ({ user, server, parameters: [ channelName ] }) {
   let channel = server.findChannel(channelName)
   if (channel) {
     let names = channel.users.map((u) => {

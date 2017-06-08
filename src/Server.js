@@ -1,19 +1,20 @@
-import net from 'net'
-import createDebug from 'debug'
-import find from 'array-find'
-import each from 'each-async'
-import User from './User'
-import Channel from './Channel'
-import Message from './Message'
-import defaultCommands from './defaultCommands'
-import isValidChannelName from './util/isValidChannelName'
+const net = require('net')
+const find = require('array-find')
+const assign = require('object-assign')
+const each = require('each-async')
+const Map = require('es6-map')
+const User = require('./User')
+const Channel = require('./Channel')
+const Message = require('./Message')
+const defaultCommands = require('./defaultCommands')
+const isValidChannelName = require('./util/isValidChannelName')
 
-const debug = createDebug('ircs:Server')
+const debug = require('debug')('ircs:Server')
 
 /**
  * Represents a single IRC server.
  */
-export default class Server extends net.Server {
+module.exports = class Server extends net.Server {
   /**
    * Creates a server instance.
    *

@@ -1,13 +1,12 @@
-import createDebug from 'debug'
-import Message from './Message'
-import Modes from './Modes'
+const Message = require('./Message')
+const Modes = require('./Modes')
 
-const debug = createDebug('ircs:Channel')
+const debug = require('debug')('ircs:Channel')
 
 /**
  * Represents an IRC Channel on the server.
  */
-export default class Channel {
+module.exports = class Channel {
   /**
    * Create a new channel.
    *

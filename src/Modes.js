@@ -2,11 +2,11 @@ const flagModeChars = [ 'p', 's', 'i', 't', 'n', 'm' ]
 const paramModeChars = [ 'l', 'k' ]
 const listModeChars = [ 'o', 'v' ]
 
-export const isFlagMode = (mode) => flagModeChars.indexOf(mode) !== -1
-export const isParamMode = (mode) => paramModeChars.indexOf(mode) !== -1
-export const isListMode = (mode) => listModeChars.indexOf(mode) !== -1
+const isFlagMode = (mode) => flagModeChars.indexOf(mode) !== -1
+const isParamMode = (mode) => paramModeChars.indexOf(mode) !== -1
+const isListMode = (mode) => listModeChars.indexOf(mode) !== -1
 
-export default class Modes {
+class Modes {
   constructor (channel) {
     this.flagModes = {}
     this.paramModes = {}
@@ -75,3 +75,8 @@ export default class Modes {
     return str
   }
 }
+
+module.exports = exports = Modes
+exports.isFlagMode = isFlagMode
+exports.isParamMode = isParamMode
+exports.isListMode = isListMode

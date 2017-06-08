@@ -1,10 +1,11 @@
 {
   "presets": [
     ["env", {
+      "loose": true,
+      "modules": false,
       "targets": {
         "node": 4
       }
     }]
-  ],
-  "plugins": ["add-module-exports"]
+  ]
 }

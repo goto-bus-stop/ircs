@@ -1,10 +1,10 @@
-import {
+const {
   ERR_NOSUCHCHANNEL,
   ERR_NOTONCHANNEL,
   ERR_NEEDMOREPARAMS
-} from '../replies'
+} = require('../replies')
 
-export default function part ({ user, server, parameters: [ channelName, message ] }) {
+module.exports = function part ({ user, server, parameters: [ channelName, message ] }) {
   if (!channelName) {
     user.send(server, ERR_NEEDMOREPARAMS, [ 'PART', ':Not enough parameters' ])
     return
