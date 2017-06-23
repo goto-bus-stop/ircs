@@ -1,6 +1,5 @@
 const net = require('net')
 const find = require('array-find')
-const assign = require('object-assign')
 const each = require('each-async')
 const Map = require('es6-map')
 const User = require('./User')
