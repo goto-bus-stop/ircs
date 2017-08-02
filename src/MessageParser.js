@@ -1,30 +1,15 @@
+const combine = require('stream-combiner')
+const through = require('through2')
+const split = require('split2')
 const Message = require('./Message')
-const { Transform } = require('readable-stream')
 
 const debug = require('debug')('ircs:MessageParser')
 
-module.exports = class MessageParser extends Transform {
-  constructor () {
-    super({
-      decodeStrings: false,
-      readableObjectMode: true
-    })
-
-    this._buffer = ''
-  }
-
-  _transform (chunk, enc, cb) {
-    chunk = this._buffer + chunk
-
-    let pieces = chunk.split('\r\n')
-    this._buffer = pieces.pop()
-
-    pieces.forEach((line) => {
-      this.push(this.parse(line))
-    })
-
-    cb()
-  }
+module.exports = function MessageParser () {
+  return combine(
+    split('\r\n'),
+    through.obj(parse)
+  )
 
   /**
    * Parses an individual IRC command.
@@ -32,7 +17,7 @@ module.exports = class MessageParser extends Transform {
    * @param {string} line IRC command string.
    * @return {Message}
    */
-  parse (line) {
+  function parse (line, enc, cb) {
     debug('parsing', line)
 
     let prefix
@@ -55,6 +40,6 @@ module.exports = class MessageParser extends Transform {
     }
 
     command = params.shift()
-    return new Message(prefix, command, params)
+    cb(null, new Message(prefix, command, params))
   }
 }

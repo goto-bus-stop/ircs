@@ -21,7 +21,7 @@ module.exports = class User extends Duplex {
     this.sock = sock
     this.nickname = null
     this.hostname = sock.remoteAddress
-    this.messages = new MessageParser()
+    this.messages = MessageParser()
     this.channels = []
 
     sock.pipe(this.messages).pipe(to.obj((message, enc, cb) => {
