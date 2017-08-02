@@ -1,4 +1,5 @@
 const net = require('net')
+const to = require('to2')
 const find = require('array-find')
 const each = require('each-async')
 const Map = require('es6-map')
@@ -51,14 +52,11 @@ module.exports = class Server extends net.Server {
       debug('incoming connection', sock.remoteAddress)
       const user = new User(sock)
       this.users.push(user)
-      user.on('readable', () => {
-        let message = user.read()
-        if (message) {
-          // woo.
-          debug('message', message + '')
-          this.execute(message)
-        }
-      })
+      user.pipe(to.obj((message, enc, cb) => {
+        debug('message', message + '')
+        this.execute(message)
+        cb()
+      }))
     })
 
     if (options.useDefaultCommands) {

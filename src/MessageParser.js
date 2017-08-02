@@ -5,9 +5,10 @@ const debug = require('debug')('ircs:MessageParser')
 
 module.exports = class MessageParser extends Transform {
   constructor () {
-    super({ decodeStrings: false })
-
-    this._readableState.objectMode = true
+    super({
+      decodeStrings: false,
+      readableObjectMode: true
+    })
 
     this._buffer = ''
   }
@@ -18,7 +19,9 @@ module.exports = class MessageParser extends Transform {
     let pieces = chunk.split('\r\n')
     this._buffer = pieces.pop()
 
-    pieces.forEach(line => this.push(this.parse(line)))
+    pieces.forEach((line) => {
+      this.push(this.parse(line))
+    })
 
     cb()
   }

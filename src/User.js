@@ -1,3 +1,4 @@
+const to = require('to2')
 const MessageParser = require('./MessageParser')
 const Message = require('./Message')
 const { Duplex } = require('readable-stream')
@@ -12,10 +13,10 @@ module.exports = class User extends Duplex {
    * @param {stream.Duplex} sock Duplex Stream to read & write commands from & to.
    */
   constructor (sock) {
-    super()
-
-    this._readableState.objectMode = true
-    this._writableState.objectMode = true
+    super({
+      readableObjectMode: true,
+      writableObjectMode: true
+    })
 
     this.sock = sock
     this.nickname = null
@@ -23,13 +24,10 @@ module.exports = class User extends Duplex {
     this.messages = new MessageParser()
     this.channels = []
 
-    // TODO use duplexify or similar
-    sock.pipe(this.messages).on('readable', () => {
-      let message = this.messages.read()
-      if (message) {
-        this.onReceive(message)
-      }
-    })
+    sock.pipe(this.messages).pipe(to.obj((message, enc, cb) => {
+      this.onReceive(message)
+      cb()
+    }))
 
     sock.on('end', () => {
       this.onReceive(new Message(null, 'QUIT', []))
