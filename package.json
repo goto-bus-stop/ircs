@@ -25,10 +25,11 @@
     "to2": "^1.0.0"
   },
   "devDependencies": {
+    "babel-core": "^6.25.0",
     "babel-preset-env": "^1.6.0",
     "babel-register": "^6.18.0",
     "gulp": "^3.9.1",
-    "gulp-babel": "^6.1.2",
+    "gulp-babel": "^7.0.0",
     "gulp-newer": "^1.1.0",
     "gulp-plumber": "^1.1.0",
     "gulp-util": "^3.0.7",
