@@ -15,16 +15,14 @@ module.exports = function nick ({ user, server, parameters: [ nickname ] }) {
     return
   }
   if (!nickname || nickname.length === 0) {
-    return user.send(server, ERR_NONICKNAMEGIVEN,
-                     [ 'No nickname given' ])
+    return user.send(server, ERR_NONICKNAMEGIVEN, [ 'No nickname given' ])
   }
 
   let lnick = nickname.toLowerCase()
   if (server.users.some((us) => us.nickname &&
                                 us.nickname.toLowerCase() === lnick &&
                                 us !== user)) {
-    return user.send(server, ERR_NICKNAMEINUSE,
-                     [ user.nickname, nickname, ':Nickname is already in use' ])
+    return user.send(server, ERR_NICKNAMEINUSE, [ user.nickname, nickname, ':Nickname is already in use' ])
   }
 
   user.send(user, 'NICK', [ nickname ])
