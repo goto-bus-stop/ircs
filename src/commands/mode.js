@@ -7,14 +7,16 @@ const {
 module.exports = function mode ({ user, server, parameters: [ target, modes = '', ...params ] }) {
   const channel = server.findChannel(target)
   if (!channel) {
-    user.send(server, ERR_NOSUCHCHANNEL, [ user.nickname, target, ':No such channel' ])
+    user.send(server, ERR_NOSUCHCHANNEL,
+      [ user.nickname, target, ':No such channel' ])
     return
   }
 
   if (!modes) {
     // bare /MODE: return current modes
     const modeString = channel.modes.toString()
-    user.send(server, RPL_CHANNELMODEIS, [ user.nickname, target, ...modeString.split(' ') ])
+    user.send(server, RPL_CHANNELMODEIS,
+      [ user.nickname, target, ...modeString.split(' ') ])
     return
   }
 
@@ -22,7 +24,8 @@ module.exports = function mode ({ user, server, parameters: [ target, modes = ''
   const modeChars = modes.slice(1).split('')
 
   if (!channel.hasOp(user)) {
-    user.send(server, ERR_CHANOPRIVSNEEDED, [ user.nickname, channel.name, ':You\'re not channel operator' ])
+    user.send(server, ERR_CHANOPRIVSNEEDED,
+      [ user.nickname, channel.name, ':You\'re not channel operator' ])
     return
   }
 

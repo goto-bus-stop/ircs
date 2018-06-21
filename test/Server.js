@@ -10,11 +10,12 @@ describe('ircs', () => {
   let server
   let client
   beforeEach(done => {
+    client = null
     server = ircs().listen(PORT, done)
       .on('error', assert.fail)
   })
   afterEach(done => {
-    client.disconnect()
+    if (client) client.disconnect()
     server.close(done)
   })
 
