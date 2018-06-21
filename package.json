@@ -13,7 +13,7 @@
   "main": "lib/ircs.js",
   "bin": "bin/ircs",
   "engines": {
-    "node": ">= 4"
+    "node": ">= 6"
   },
   "dependencies": {
     "array-find": "^1.0.0",
