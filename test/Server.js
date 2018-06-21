@@ -1,5 +1,5 @@
 /* eslint-env mocha */
-const { Client } = require('irc')
+const { Client } = require('irc-upd')
 const ircs = require('../src')
 const Message = require('../src/Message')
 const assert = require('assert')
