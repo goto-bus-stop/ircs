@@ -10,7 +10,7 @@
   "repository": "goto-bus-stop/ircs",
   "bugs": "https://github.com/goto-bus-stop/ircs/issues",
   "author": "goto-bus-stop <rene@kooi.me>",
-  "main": "lib/index.js",
+  "main": "lib/ircs.js",
   "bin": "bin/ircs",
   "engines": {
     "node": ">= 4"
@@ -28,6 +28,8 @@
     "@babel/core": "7.0.0-beta.51",
     "@babel/preset-env": "7.0.0-beta.51",
     "@babel/register": "7.0.0-beta.51",
+    "browser-pack-flat": "^3.1.0",
+    "browserify": "^16.2.2",
     "gulp": "^4.0.0",
     "gulp-babel": "^8.0.0-beta.2",
     "gulp-newer": "^1.1.0",
