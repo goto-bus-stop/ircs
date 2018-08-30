@@ -11,7 +11,7 @@ describe('MessageParser', function () {
         i++
       })
       .on('end', () => {
-        assert.equal(i, 3)
+        assert.strictEqual(i, 3)
         done()
       })
       .end('CAP LS\r\nPASS my_password\r\nUSER test_user 0 * :Real Name\r\n')
@@ -20,8 +20,8 @@ describe('MessageParser', function () {
   it('reads simple incoming commands correctly', (done) => {
     MessageParser()
       .on('data', (message) => {
-        assert.equal(message.command, 'NICK')
-        assert.deepEqual(message.parameters, [ 'myNickName' ])
+        assert.strictEqual(message.command, 'NICK')
+        assert.deepStrictEqual(message.parameters, [ 'myNickName' ])
       })
       .on('end', done)
       .end('NICK myNickName\r\n')
@@ -30,8 +30,8 @@ describe('MessageParser', function () {
   it('reads incoming commands with trailing data correctly', (done) => {
     MessageParser()
       .on('data', (message) => {
-        assert.equal(message.command, 'USER')
-        assert.deepEqual(message.parameters, [ 'test_user', '0', '*', 'This trailing data is a long real name' ])
+        assert.strictEqual(message.command, 'USER')
+        assert.deepStrictEqual(message.parameters, [ 'test_user', '0', '*', 'This trailing data is a long real name' ])
       })
       .on('end', done)
       .end('USER test_user 0 * :This trailing data is a long real name\r\n')
@@ -40,9 +40,9 @@ describe('MessageParser', function () {
   it('reads incoming commands with prefixes', (done) => {
     MessageParser()
       .on('data', (message) => {
-        assert.equal(message.command, 'COMMAND')
-        assert.equal(message.prefix, 'nick!user@localhost')
-        assert.deepEqual(message.parameters, [ 'parameter', 'trailing' ])
+        assert.strictEqual(message.command, 'COMMAND')
+        assert.strictEqual(message.prefix, 'nick!user@localhost')
+        assert.deepStrictEqual(message.parameters, [ 'parameter', 'trailing' ])
       })
       .on('end', done)
       .end(':nick!user@localhost COMMAND parameter :trailing\r\n')
